@@ -12,18 +12,26 @@ from src.models.notes_book import NotesBook
 from src.utils.colorizer import Colorizer
 from src.utils.handler_commands import (add_contact, change_contact, delete_contact, show_phone_user, show_all, add_email, add_birthday, show_birthday, birthdays, add_note, show_notes, find_note, delete_note, edit_note)
 from src.storage.storage import save_data, load_data
+from src.utils.cli_input import Prompt
+
+COMMANDS = [
+    "hello", "add", "change", "phone", "all", "delete", "add-email",
+    "add-birthday", "show-birthday", "birthday",
+    "add-note", "show-notes", "find-note", "edit-note", "delete-note",
+    "exit", "close"
+]
 
 
 def main():
     # Creating a new address book
     book, notes = load_data()
 
+    prompt = Prompt(commands=COMMANDS, history_file="src/storage/command_history.txt")
 
     print(Colorizer.highlight("📘 Welcome to the Assistant Bot!"))
-    print(Colorizer.info("Type a command to get started (hello, add, change, phone, all, add-birthday, show-birthday, birthday, add-note, exit)"))
 
     while True:
-        user_input = input(Colorizer.commandline(">>> Enter a command: ")).strip()
+        user_input = prompt.ask(">>> Enter command: ").strip()
         if not user_input:
             print(Colorizer.warning("Please enter a valid command."))
             continue
