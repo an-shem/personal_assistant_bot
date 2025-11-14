@@ -10,17 +10,17 @@ from src.models.record import Record
 from src.utils.parse_input import parse_input
 from src.models.notes_book import NotesBook 
 from src.utils.colorizer import Colorizer
-from src.utils.handler_commands import (add_contact, change_contact, show_phone_user, show_all, add_birthday, show_birthday, birthdays, add_note, show_notes, find_note, delete_note, edit_note)
+from src.utils.handler_commands import (add_contact, change_contact, delete_contact, show_phone_user, show_all, add_birthday, show_birthday, birthdays, add_note, show_notes, find_note, delete_note, edit_note)
 from src.storage.storage import save_data, load_data
 
 
 def main():
     # Creating a new address book
     book, notes = load_data()
-    notes = NotesBook()
+
 
     print(Colorizer.highlight("📘 Welcome to the Assistant Bot!"))
-    print(Colorizer.info("Type a command to get started (add, change, phone, all, add-birthday, show-birthday, birthday, add-note, exit)"))
+    print(Colorizer.info("Type a command to get started (hello, add, change, phone, all, add-birthday, show-birthday, birthday, add-note, exit)"))
 
     while True:
         user_input = input(Colorizer.commandline(">>> Enter a command: ")).strip()
@@ -30,9 +30,9 @@ def main():
         command, *args = parse_input(user_input)
 
         if command in ["close", "exit"]:
-            print("Saving address book...")
-            save_data(book)
-            print("Good bye! See you later!")
+            print(Colorizer.info("💾 Saving your data..."))
+            save_data(book, notes)
+            print(Colorizer.success("Data saved. See you later!"))
             break
 
         elif command == "hello":

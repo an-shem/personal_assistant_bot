@@ -1,5 +1,56 @@
 from src.models.notes_book import Note, NotesBook
 from src.utils.error_handler import input_error
+from src.models.address_book import AddressBook
+
+@input_error
+def add_contact(args, book):
+    """Add a contact or add phone to existing contact."""
+    pass
+
+@input_error 
+def change_contact(args, book: AddressBook):
+    """Change an existing phone number for a contact."""
+    pass
+
+@input_error 
+def change_contact(args, book: AddressBook):
+    """Change an existing phone number for a contact."""
+    pass
+
+@input_error 
+def delete_contact(args, book: AddressBook):
+    """Delete  contact."""
+    pass
+
+@input_error
+def show_phone_user(args, book: AddressBook):
+    """Show phone(s) of a given contact."""
+    pass
+
+@input_error
+def show_all( book: AddressBook):
+    """Show all contacts in the address book."""
+    pass
+
+@input_error
+def show_phone_user(args, book: AddressBook):
+    """Show phone(s) of a given contact."""
+    pass
+
+@input_error
+def add_birthday(args, book: AddressBook):
+    """Add birthday to an existing contact."""
+    pass
+
+@input_error
+def show_birthday(args, book: AddressBook):
+    """Show birthday for a contact."""
+    pass
+
+@input_error
+def birthdays(args, book: AddressBook):
+    """Show contacts who have birthdays within the next 7 days."""
+    pass
 
 @input_error
 def add_note(args, notes_book: NotesBook):
