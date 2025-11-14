@@ -81,9 +81,11 @@ def add_note(args, notes_book: NotesBook):
     
     tags_message = f" with tags: {tags_input}" if tags_input else ""
 
+        
     note = Note(title, content)
     notes_book.add_note(note)
     return f"Note '{title}' successfully added{tags_message}."
+
 
 
 @input_error
