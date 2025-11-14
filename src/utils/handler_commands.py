@@ -76,10 +76,16 @@ def add_note(args, notes_book: NotesBook):
     content = PROMPT_TOOL.ask("Enter the text of the note:", enable_completion=False).strip()
     if not content: 
         raise ValueError("The text of the note cannot be empty.")
+    
+    tags_input = PROMPT_TOOL.ask("Enter tags (optional, separated by spaces/commas):", enable_completion=False).strip()
+    
+    tags_message = f" with tags: {tags_input}" if tags_input else ""
+
         
     note = Note(title, content)
     notes_book.add_note(note)
-    return f"Note '{title}' successfully added."
+    return f"Note '{title}' successfully added{tags_message}."
+
 
 
 @input_error
@@ -112,17 +118,29 @@ def edit_note(args, notes_book: NotesBook):
     """Edit an existing note by title."""
     title = PROMPT_TOOL.ask("Enter a title for change: ", enable_completion=False).strip() 
 
-    new_content = PROMPT_TOOL.ask("Enter new content: ", enable_completion=False).strip()
-
     note = notes_book.find_note_by_title(title)
 
-    if note:
-        if new_content:
-            note.content = new_content
-
-        return (f"Note with title '{title}' successfully edited.")
-    else:
+    if not note:
         return (f"Note with title '{title}' not found.")
+        
+    new_content = PROMPT_TOOL.ask("Enter new content (leave empty to skip): ", enable_completion=False).strip()
+    
+    new_tags_input = PROMPT_TOOL.ask("Enter new tags (will replace old ones, leave empty to skip): ", enable_completion=False).strip()
+    
+    changes = []
+    
+    if new_content:
+        note.edit_content(new_content)
+        changes.append("content")
+        
+    if new_tags_input:
+        note.tags = note._parse_tag(new_tags_input) 
+        changes.append("tags")
+        
+    if not changes:
+        return f"Note '{title}' found, but no changes were applied."
+        
+    return f"Note with title '{title}' successfully edited: {', '.join(changes)}."
 
 
 @input_error
@@ -139,3 +157,43 @@ def delete_note(args, notes_book: NotesBook):
         return notes_book.delete_note(actual_title_key)
     else:
         return f"Note with title: '{title}' not found"
+    
+@input_error
+def add_tags_to_note(args, notes_book: NotesBook):
+    """
+    Adds one or more tags to an existing note. 
+    Accepts title and tags as arguments or interactively.
+    """
+    if len(args) >= 1:
+        title = args[0]
+        tags_input = " ".join(args[1:])
+    else:
+        title = PROMPT_TOOL.ask("Enter the title of the note to add tags to: ", enable_completion=False).strip()
+        if not title:
+            raise ValueError("Note title cannot be empty.")
+        tags_input = "" 
+
+    note = notes_book.find_note_by_title(title)
+    if not note:
+        return f"Note '{title}' not found."
+
+    if not tags_input:
+        tags_input = PROMPT_TOOL.ask("Enter tags (separated by spaces/commas):", enable_completion=False).strip()
+        
+    if not tags_input:
+        return f"No tags were entered for note '{title}'."
+
+    note.add_tags(tags_input) 
+    
+    return f"Tags successfully added to note '{title}'. New tags: {tags_input}"
+
+
+@input_error
+def find_notes_by_tag(args, notes_book: NotesBook):
+    if len(args) != 1:
+        raise ValueError("Usage: find-tag [tag]")
+    tag = args[0]
+    notes = notes_book.search_notes_by_tag(tag)
+    if not notes:
+        return f"No notes found with tag '{tag}'."
+    return "---Notes found---\n" + "\n\n".join(str(n) for n in notes)

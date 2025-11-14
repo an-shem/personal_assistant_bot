@@ -10,7 +10,7 @@ from src.models.record import Record
 from src.utils.parse_input import parse_input
 from src.models.notes_book import NotesBook 
 from src.utils.colorizer import Colorizer
-from src.utils.handler_commands import (add_contact, change_contact, delete_contact, show_phone_user, show_all, add_email, add_birthday, show_birthday, birthdays, add_note, show_notes, find_note, delete_note, edit_note)
+from src.utils.handler_commands import (add_contact, change_contact, delete_contact, show_phone_user, show_all, add_email, add_birthday, show_birthday, birthdays, add_note, show_notes, find_note, delete_note, edit_note, add_tags_to_note, find_notes_by_tag)
 from src.storage.storage import save_data, load_data
 from src.utils.cli_input import Prompt
 
@@ -18,6 +18,7 @@ COMMANDS = [
     "hello", "add", "change", "phone", "all", "delete", "add-email",
     "add-birthday", "show-birthday", "birthday",
     "add-note", "show-notes", "find-note", "edit-note", "delete-note",
+    "add-tag", "find-tag",
     "exit", "close"
 ]
 
@@ -45,6 +46,8 @@ def main():
 
         elif command == "hello":
             print(Colorizer.info("How can I help you?"))
+        elif command == "info":
+            print(Colorizer.info(f"Please use one of the following commands: {', '.join(COMMANDS)}"))
         elif command == "add":
             print(Colorizer.success(add_contact(args, book)))
         elif command == "change":
@@ -74,8 +77,12 @@ def main():
             print(Colorizer.success(edit_note(args, notes)))
         elif command == "delete-note":
             print(Colorizer.warning(delete_note(args, notes)))
+        elif command == "add-tag":
+            print(Colorizer.success(add_tags_to_note(args, notes)))
+        elif command == "find-tag":
+            print(Colorizer.info(find_notes_by_tag(args, notes)))
         else:
-            print(Colorizer.error("❌ Invalid command. Type 'hello' to see available options."))
+            print(Colorizer.error("❌ Invalid command. Type 'info' to see available options."))
 
 
 if __name__ == "__main__":

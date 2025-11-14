@@ -11,7 +11,7 @@ class Prompt:
         "prompt": "bold #00afff",
     })
 
-    def __init__(self, commands=None, history_file="command_history.txt"):
+    def __init__(self, commands=None, history_file="src/storage/command_history.txt"):
 
         self.commands = commands or []
         self.completer = WordCompleter(self.commands, ignore_case=True)
