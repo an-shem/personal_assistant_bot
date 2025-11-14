@@ -38,6 +38,11 @@ def show_phone_user(args, book: AddressBook):
     pass
 
 @input_error
+def add_email(args, book: AddressBook):
+    """Add email to an existing contact."""
+    pass
+
+@input_error
 def add_birthday(args, book: AddressBook):
     """Add birthday to an existing contact."""
     pass
