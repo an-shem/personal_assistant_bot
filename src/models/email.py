@@ -3,7 +3,8 @@ import re
 
 class Email:
     def __init__(self, email):
-        self.email = email
+      self._email = None
+      self.email = email
     
     @property
     def email(self):
