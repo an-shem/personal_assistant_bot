@@ -9,13 +9,13 @@ class Phone(Field):
         super().__init__(normalized_value)
 
     def __str__(self):
-            return self.value
+        return self.value
         
     def __eq__(self, other):
-            if isinstance(other, Phone):
-                return self.value == other.value
-            return False
+        if isinstance(other, Phone):
+            return self.value == other.value
+        return False
         
     def __repr__(self):
-            return f"Phone({self.value})"
+        return f"Phone({self.value})"
         

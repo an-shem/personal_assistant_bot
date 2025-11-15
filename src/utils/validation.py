@@ -13,7 +13,7 @@ class Validation:
     @staticmethod
     def validate_phone(phone: str) -> bool:
         """
-        Validate Ukrainian phone numbers in multiple formats)
+        Validate Ukrainian phone numbers in multiple formats
         """
         cleaned_phone = re.sub(r'[\s\-\(\)]', '', phone)
 
@@ -22,6 +22,7 @@ class Validation:
              r'^0\d{9}$',
              r'^380\d{9}$', 
              r'^80\d{9}$',
+             r'^\d{10}$',
         ]
  
         if not any(re.match(pattern, cleaned_phone) for pattern in patterns):
@@ -31,6 +32,7 @@ class Validation:
                 "- 0XXXXXXXXX\n"
                 "- 380XXXXXXXXX\n"
                 "- 80XXXXXXXXX\n"
+                "- XXXXXXXXXX (10 digits)\n"
                 "- With spaces/dashes/parentheses"
                 )
         return True
@@ -42,16 +44,18 @@ class Validation:
         """
         cleaned = re.sub(r'[\s\-\(\)]', '', phone)
 
-        if cleaned.startswith('0'):
+        if cleaned.startswith('0') and len(cleaned) == 10:
             return '+38' + cleaned
-        elif cleaned.startswith('80'):
+        elif cleaned.startswith('80') and len(cleaned) == 11:
             return '+3' + cleaned
-        elif cleaned.startswith('380'): 
+        elif cleaned.startswith('380') and len(cleaned) == 12: 
             return '+' + cleaned
-        elif cleaned.startswith('+380'): 
+        elif cleaned.startswith('+380') and len(cleaned) == 13: 
             return cleaned
+        elif len(cleaned) == 10 and cleaned.isdigit():
+            return '+380' + cleaned
         else:
-            raise ValueError("Cannot normalise phone number")
+            raise ValueError("Cannot normalise phone number: {phone}")
     
     @staticmethod
     def validate_email(email: str) -> bool:

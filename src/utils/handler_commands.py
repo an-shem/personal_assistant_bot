@@ -18,10 +18,9 @@ def add_contact(args, book: AddressBook):
         raise ValueError("Invalid input. Use: Add [name] [phone]")
     name, phone = args
     name = name.capitalize()
-    try:
-        phone_obj = Phone(phone)
-    except ValueError as e:
-        raise ValueError(f"Invalid phone number: {e}")
+ 
+    phone_obj = Phone(phone)
+    
     record = book.find(name)
     if record is None:
         record = Record(name)
@@ -29,9 +28,10 @@ def add_contact(args, book: AddressBook):
         message = f"Contact '{name}' added."
     else:
         message = f"Contact '{name}' updated."
-    if phone:
-        record.add_phone(phone_obj.value)
-    return message
+    
+    record.add_phone(phone_obj.value)
+    return f"{message} Phone: {phone_obj.value}"
+   
 
 
 @input_error
@@ -40,7 +40,15 @@ def change_contact(args, book: AddressBook):
     if len(args) != 3:
         raise ValueError("Usage: change [name] [old_phone] [new_phone]")
     name, old_phone, new_phone = args
-    return f"Phone for '{name}' successfully changed."
+    name = name.capitalize()
+
+    record = book.find(name)
+    if not record:
+        return f"Contact '{name}' not found."
+    
+    record.edit_phone(old_phone, new_phone)
+    new_phone_obj = Phone(new_phone)
+    return f"Phone for '{name}' successfully changed to {new_phone_obj.value}."
 
 
 @input_error
@@ -71,7 +79,13 @@ def delete_contact(args, book: AddressBook):
     """Usage: delete [name]"""
     if len(args) != 1:
         raise ValueError("Usage: delete [name]")
-    name = args[0]
+    name = args[0].capitalize()
+
+    record = book.find(name)
+    if not record:
+        return f"Contact '{name}' not found."
+    
+    book.delete(name)
     return f"Contact '{name}' deleted."
 
 
@@ -81,6 +95,11 @@ def add_birthday(args, book: AddressBook):
     if len(args) != 2:
         raise ValueError("Usage: add-birthday [name] [DD.MM.YYYY]")
     name, date_str = args
+    name = name.capitalize()
+    record = book.find(name)
+    if not record:
+        return f"Contact '{name}' not found."
+    record.add_birthday(date_str)
     return f"Birthday for '{name}' set to {date_str}."
 
 
@@ -89,16 +108,47 @@ def show_birthday(args, book: AddressBook):
     """Usage: show-birthday [name]"""
     if len(args) != 1:
         raise ValueError("Usage: show-birthday [name]")
-    name = args[0]
-    return f"Birthday for '{name}': [date]"
+    name = args[0].capitalize()
+    record = book.find(name)
+    if not record:
+        return f"Contact '{name}' not found."
+    
+    if not record.birthday or not record.birthday.value:
+        return f"Contact '{name}' has no birthday set."
+    
+    return f"Birthday for '{name}': {record.birthday.value.strftime('%d.%m.%Y')}"
 
 
 @input_error
 def birthdays(args, book: AddressBook):
     """Usage: birthdays [days] (e.g., birthdays 7)"""
     days = int(args[0]) if args else 7
-    return f"Upcoming birthdays in the next {days} days: [list of contacts]"
 
+    upcoming_birthdays = book.get_upcoming_birthdays(days)
+    if not upcoming_birthdays:
+        return f"No upcoming birthdays in the next {days} days."
+    
+    result =  f"Upcoming birthdays in the next {days} days:\n"
+    for birthday_info in upcoming_birthdays:
+        result += f"- {birthday_info['name']}: {birthday_info['congratulation_date']}\n"
+    return result.strip()
+
+@input_error
+def search_by_phone(args, book: AddressBook):
+    """Usage: search-phone [phone]"""
+    if len(args) != 1:
+        raise ValueError("Usage: search-phone [phone]")
+    phone_query = args[0]
+
+    results = book.search_by_phone(phone_query)
+    if not results:
+        return f"No contacts found with phone: {phone_query}"
+    result_str = f"Found {len(results)} contact(s) with phone '{phone_query}':\n"
+    result_str += "=" * 50 + "\n"
+    for i, record in enumerate(results, 1):
+        result_str += f"\n{i}. {record}\n"
+        result_str += "-" * 50 + "\n"
+    return result_str
 
 @input_error
 def add_note(args, notes_book: NotesBook):
