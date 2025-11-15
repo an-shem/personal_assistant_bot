@@ -25,6 +25,7 @@ from src.utils.handler_commands import (
     find_address_by_city,
     search_address_global,
     show_all_addresses,
+    search_contact,
     add_note,
     show_notes,
     find_note,
@@ -43,6 +44,7 @@ COMMANDS = [
     "phone",
     "all",
     "delete",
+    "search",
     "add-email",
     "add-birthday",
     "show-birthday",
@@ -118,6 +120,8 @@ def main():
             print(Colorizer.highlight(show_birthday(args, book)))
         elif command == "birthdays":
             print(Colorizer.info(birthdays(args, book)))
+        elif command == "search":
+            print(Colorizer.info(search_contact(args, book)))
         elif command == "add-note":
             print(Colorizer.success(add_note(args, notes)))
         elif command == "show-notes":
