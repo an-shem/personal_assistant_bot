@@ -1,9 +1,9 @@
 from src.models.field import Field
+from src.utils.validation import Validation
 
 class Name(Field):
-    """Represents a field for storing a name, inheriting from the Field class."""
+    """Represents a field for storing a name, with validation."""
 
-    def __init__(self, name):
-        """Initialize the Name field with a name."""
-        self.value = name
-        
+    def __init__(self, name: str):
+        Validation.validate_name(name)
+        super().__init__(name)

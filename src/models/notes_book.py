@@ -1,6 +1,7 @@
 from collections import UserDict
 from src.models.fields_notes import Content
-from src.models.fields_notes import Title, Content 
+from src.models.fields_notes import Title, Content
+
 
 class Note:
     def __init__(self, title, content=None, tags=None):
@@ -22,9 +23,7 @@ class Note:
             return set()
 
         clean_tags = {
-            tag.strip().lstrip('#').lower()
-            for tag in tags_list
-            if tag.strip() 
+            tag.strip().lstrip("#").lower() for tag in tags_list if tag.strip()
         }
         return clean_tags
 
@@ -32,25 +31,26 @@ class Note:
         """Edit note content."""
         self.content = Content(new_content)
 
-
     def add_tags(self, tags_string):
-        if not hasattr(self, 'tags'): 
+        if not hasattr(self, "tags"):
             self.tags = set()
-        new_tags = self._parse_tag(tags_string) 
+        new_tags = self._parse_tag(tags_string)
         self.tags.update(new_tags)
 
-
     def remove_tag(self, tag: str):
-        normalized_tag = tag.strip().lstrip('#').lower()
+        normalized_tag = tag.strip().lstrip("#").lower()
         if normalized_tag in self.tags:
             self.tags.remove(normalized_tag)
 
-   
     def __str__(self) -> str:
         title_str = f"Title: {self.title.value}"
         content_str = f"Content: {self.content}" if self.content else ""
         current_tags = getattr(self, "tags", set())
-        tags_str = f"Tags: {', '.join(sorted([f'#{t}' for t in current_tags]))}" if current_tags else ""
+        tags_str = (
+            f"Tags: {', '.join(sorted([f'#{t}' for t in current_tags]))}"
+            if current_tags
+            else ""
+        )
         return "\n".join(filter(None, [title_str, content_str, tags_str]))
 
 
@@ -65,8 +65,7 @@ class NotesBook(UserDict):
         for key, note in self.data.items():
             if key.lower() == search_title:
                 return note
-        return None 
-    
+        return None
 
     def search_notes_by_keyword(self, keyword):
         """Find note by keyword"""
@@ -78,10 +77,10 @@ class NotesBook(UserDict):
             if note.content and note.content.value:
                 content_match = keyword in note.content.value.lower()
 
-            tags_match = keyword in ' '.join(getattr(note, 'tags', set()))
-            
+            tags_match = keyword in " ".join(getattr(note, "tags", set()))
+
             if title_match or content_match or tags_match:
-                found_notes.append(note) 
+                found_notes.append(note)
         return found_notes
 
 
@@ -91,7 +90,7 @@ class NotesBook(UserDict):
             del self.data[title]
             return f"Note with title: '{title}' successfully deleted."
         return f"Note with title: '{title}' not found."
-    
+
     def change_note(self, title, new_content):
         """Change the note by title."""
         note = self.find_note_by_title(title)
@@ -103,12 +102,15 @@ class NotesBook(UserDict):
 
     def search_notes_by_tag(self, tag: str):
         """Return list of notes that contain given tag."""
-        normalized_tag = tag.strip().lstrip('#').lower() 
+        normalized_tag = tag.strip().lstrip("#").lower()
         if not normalized_tag:
             return []
-            
-        return [note for note in self.data.values() if normalized_tag in getattr(note, "tags", set())]
 
+        return [
+            note
+            for note in self.data.values()
+            if normalized_tag in getattr(note, "tags", set())
+        ]
 
     def __str__(self):
         if not self.data:
