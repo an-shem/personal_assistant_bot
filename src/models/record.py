@@ -12,6 +12,7 @@ class Record:
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.addresses = []
 
         if phone:
             self.add_phone(phone)
@@ -20,28 +21,51 @@ class Record:
 
     def add_phone(self, number):
         """Add a phone number to the record."""
-        self.phones.append(Phone(number))
+        phone_obj = Phone(number)
+        if any(phone.value == phone_obj.value for phone in self.phones):
+            raise ValueError(f"Phone number {phone_obj.value} already exists")
+        self.phones.append(phone_obj)
 
     def remove_phone(self, number):
         """Remove a phone number from the record."""
-
-        self.phones = list(filter(lambda phone: phone.value != number, self.phones))
+        try:
+            phone_obj = Phone(number)
+            number_to_remove = phone_obj.value
+        except ValueError:
+            number_to_remove = number
+        
+        original_count = len(self.phones)
+        self.phones = [phone for phone in self.phones if phone.value != number_to_remove]
+        if len(self.phones) == original_count:
+            raise ValueError(f"Phone number {number_to_remove} not found")
 
     def edit_phone(self, old_number, new_number):
         """Edit a phone number in the record."""
+        old_phone_obj = Phone(old_number)
+        new_phone_obj = Phone(new_number)
 
-        self.phones = list(
-            map(
-                lambda phone: Phone(new_number) if phone.value == old_number else phone,
-                self.phones,
-            )
-        )
+        found = False
+        for i, phone in enumerate(self.phones):
+            if phone.value == old_phone_obj.value:
+                if any(p.value == new_phone_obj.value for p in self.phones if p.value != old_phone_obj.value):
+                    raise ValueError(f"Phone number {new_phone_obj.value} already exists")
+                self.phones[i] = new_phone_obj
+                found = True
+                break
 
+        if not found:
+            raise ValueError(f"Phone number {old_phone_obj.value} not found") 
+        
     def find_phone(self, number):
         """Find a phone number in the record."""
+        try:
+            phone_obj = Phone(number)
+            search_number = phone_obj.value
+        except ValueError:
+            search_number = number
 
         for phone in self.phones:
-            if phone.value == number:
+            if phone.value == search_number:
                 return phone
         return None
     
@@ -56,24 +80,24 @@ class Record:
 
         return f"Contact name: {self.name.value}, phones: {phones}{b_day_str}"
     
-    def add_record(self, street, city, country, house_number=None, apartment=None, postal_code=None):
+    def add_addresses(self, street, city, country, house_number=None, apartment=None, postal_code=None):
         try:
             address = Address(street, city, country, house_number, apartment, postal_code)
-            self.data.append(address)
+            self.addresses.append(address)
             return address
         except ValueError as e:
             raise ValueError(f"Error creating address: {e}")
     
     def delete_record(self, address):
-        if address in self.data:
-            self.data.remove(address)
+        if address in self.addresses:
+            self.addresses.remove(address)
             return True
         return False
     
     def find_by_city(self, city):
         results = []
         city_lower = city.lower()
-        for address in self.data:
+        for address in self.addresses:
             if address.city.lower() == city_lower:
                 results.append(address)
         return results
@@ -81,16 +105,16 @@ class Record:
     def find_by_country(self, country):
         results = []
         country_lower = country.lower()
-        for address in self.data:
+        for address in self.addresses:
             if address.country.lower() == country_lower:
                 results.append(address)
         return results
     
-    def search(self, query):
+    def search_addresses(self, query):
         query_lower = query.lower()
         results = []
         
-        for address in self.data:
+        for address in self.addresses:
             if query_lower in address.street.lower():
                 results.append(address)
                 continue
@@ -109,8 +133,8 @@ class Record:
         
         return results
     
-    def get_all_contacts(self):
-        return self.data.copy()
+    def get_all_addresses(self):
+        return self.addresses.copy()
     
 
 

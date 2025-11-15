@@ -1,6 +1,7 @@
 from collections import UserDict
 from datetime import datetime, timedelta
 from src.utils.constants import DATE_FORMAT
+from src.models.phone import Phone
 
 
 class AddressBook(UserDict):
@@ -20,10 +21,26 @@ class AddressBook(UserDict):
         if name in self.data:
             del self.data[name]
 
-    def get_upcoming_birthdays(self):
+    def search_by_phone(self, phone_query):
+        """Search contacts by phone number."""
+        results = []
+        try:
+            phone_obj = Phone(phone_query)
+            normalized_query = phone_obj.value
+        except ValueError:
+            normalized_query = phone_query
+
+        for record in self.data.values():
+            for phone in record.phones:
+                if normalized_query in phone.value:
+                    results.append(record)
+                    break
+        return results
+
+    def get_upcoming_birthdays(self, days=7):
         """
         Returns a list of contacts who should be congratulated
-        within the next 7 days, grouped by day.
+        within the next specified days (default 7 days.
         """
         today = datetime.today().date()
         upcoming_birthday = []
@@ -36,7 +53,7 @@ class AddressBook(UserDict):
 
             if birthday_this_year < today: # already celebrate
                 birthday_this_year = birthday_this_year.replace(year=today.year + 1)
-            if today <= birthday_this_year <= today + timedelta(days=7):
+            if today <= birthday_this_year <= today + timedelta(days=days):
                 if birthday_this_year.weekday() == 5:
                     congratulation_date = birthday_this_year + timedelta(days=2)
                 elif birthday_this_year.weekday() == 6:  
@@ -65,7 +82,6 @@ class AddressBook(UserDict):
         
         return result
 
-    
     def __repr__(self):
         return f"AddressBook(contacts={len(self.data)})"
 
