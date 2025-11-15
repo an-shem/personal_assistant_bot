@@ -220,12 +220,10 @@ def add_tags_to_note(args, notes_book: NotesBook):
         title = args[0]
         tags_input = " ".join(args[1:])
     else:
-        title = PROMPT_TOOL.ask(
-            "Enter the title of the note to add tags to: ", enable_completion=False
-        ).strip()
+        title = PROMPT_TOOL.ask("Enter the title of the note to add tags to: ", enable_completion=False).strip()
         if not title:
             raise ValueError("Note title cannot be empty.")
-        tags_input = ""
+        tags_input = "" 
 
     note = notes_book.find_note_by_title(title)
     if not note:

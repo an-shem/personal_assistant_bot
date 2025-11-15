@@ -16,7 +16,7 @@ class Note:
             return set()
 
         if isinstance(tags_input, str):
-            tags_list = tags_input.replace(",", " ").split()
+            tags_list = tags_input.replace(',', ' ').split()
         elif isinstance(tags_input, (list, set, tuple)):
             tags_list = tags_input
         else:
@@ -82,6 +82,7 @@ class NotesBook(UserDict):
             if title_match or content_match or tags_match:
                 found_notes.append(note)
         return found_notes
+
 
     def delete_note(self, title):
         """Delete a note by title."""

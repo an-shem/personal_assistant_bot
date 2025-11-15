@@ -88,11 +88,7 @@ def main():
         elif command == "hello":
             print(Colorizer.info("How can I help you?"))
         elif command == "info":
-            print(
-                Colorizer.info(
-                    f"Please use one of the following commands: {', '.join(COMMANDS)}"
-                )
-            )
+            print(Colorizer.info(f"Please use one of the following commands: {', '.join(COMMANDS)}"))
         elif command == "add":
             print(Colorizer.success(add_contact(args, book)))
         elif command == "change":
@@ -137,11 +133,7 @@ def main():
         elif command == "find-tag":
             print(Colorizer.info(find_notes_by_tag(args, notes)))
         else:
-            print(
-                Colorizer.error(
-                    "❌ Invalid command. Type 'info' to see available options."
-                )
-            )
+            print(Colorizer.error("❌ Invalid command. Type 'info' to see available options."))
 
 
 if __name__ == "__main__":
