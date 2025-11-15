@@ -1,14 +1,4 @@
-"""
-Module for managing a simple address book.
-
-Provides classes for contact fields, individual contact records,
-and an address book that stores multiple records.
-"""
-
-from src.models.address_book import AddressBook
-from src.models.record import Record
 from src.utils.parse_input import parse_input
-from src.models.notes_book import NotesBook
 from src.utils.colorizer import Colorizer
 from src.utils.handler_commands import (
     add_contact,
@@ -36,44 +26,18 @@ from src.utils.handler_commands import (
 )
 from src.storage.storage import save_data, load_data
 from src.utils.cli_input import Prompt
-
-COMMANDS = [
-    "hello",
-    "add",
-    "change",
-    "phone",
-    "all",
-    "delete",
-    "search",
-    "add-email",
-    "add-birthday",
-    "show-birthday",
-    "birthdays",
-    "add-address",
-    "delete-address",
-    "find-city",
-    "search-address",
-    "show-addresses",
-    "add-note",
-    "show-notes",
-    "find-note",
-    "edit-note",
-    "delete-note",
-    "add-tag",
-    "find-tag",
-    "exit",
-    "close",
-]
+from src.utils.constants import COMMANDS_INFO
+from src.utils.tabulate_helpers import show_commands as print_commands_table, show_contacts_table
 
 
 def main():
     # Creating a new address book
     book, notes = load_data()
 
-    prompt = Prompt(commands=COMMANDS, history_file="src/storage/command_history.txt")
+    prompt = Prompt(commands=COMMANDS_INFO, history_file="src/storage/command_history.txt")
 
     print(Colorizer.highlight("📘 Welcome to the Assistant Bot!"))
-    print(Colorizer.info(f"Please use one of the following commands: {', '.join(COMMANDS)}"))
+    print_commands_table()
 
     while True:
         user_input = prompt.ask(">>> Enter command: ").strip()
@@ -90,8 +54,8 @@ def main():
 
         elif command == "hello":
             print(Colorizer.info("How can I help you?"))
-        elif command == "info":
-            print(Colorizer.info(f"Please use one of the following commands: {', '.join(COMMANDS)}"))
+        elif command in ["help", "commands"]:
+            print_commands_table()
         elif command == "add":
             print(Colorizer.success(add_contact(args, book)))
         elif command == "change":
@@ -99,7 +63,8 @@ def main():
         elif command == "phone":
             print(Colorizer.highlight(show_phone_user(args, book)))
         elif command == "all":
-            print(Colorizer.highlight(show_all(book)))
+            contacts = list(book.data.values())     
+            show_contacts_table(contacts)
         elif command == "delete":
             print(Colorizer.warning(delete_contact(args, book)))
         elif command == "add-birthday":
