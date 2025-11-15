@@ -1,5 +1,5 @@
-from datetime import datetime
 from functools import wraps
+
 
 def input_error(func):
     @wraps(func)
@@ -13,9 +13,6 @@ def input_error(func):
         except IndexError as e:
             return f"IndexError: {str(e)}"
         except Exception as e:
-            return f"Unexpected error: {str(e)}"
+            return f"Error: {str(e)}"
 
     return inner
-
-
-
