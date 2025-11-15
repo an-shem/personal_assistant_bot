@@ -16,7 +16,7 @@ from src.utils.cli_input import Prompt
 
 COMMANDS = [
     "hello", "add", "change", "phone", "all", "delete", "add-email",
-    "add-birthday", "show-birthday", "birthday", 
+    "add-birthday", "show-birthday", "birthdays", 
     "add-address", "delete-address", "find-city", "search-address", "show-addresses",
     "add-note", "show-notes", "find-note", "edit-note", "delete-note",
     "add-tag", "find-tag",
@@ -75,7 +75,7 @@ def main():
             print(Colorizer.highlight(show_all_addresses(args, book)))
         elif command == "show-birthday":
             print(Colorizer.highlight(show_birthday(args, book)))
-        elif command == "birthday":
+        elif command == "birthdays":
             print(Colorizer.info(birthdays(args, book)))
         elif command == "add-note":
             print(Colorizer.success(add_note(args, notes)))
