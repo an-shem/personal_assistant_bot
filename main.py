@@ -71,6 +71,7 @@ def main():
     prompt = Prompt(commands=COMMANDS, history_file="src/storage/command_history.txt")
 
     print(Colorizer.highlight("📘 Welcome to the Assistant Bot!"))
+    print(Colorizer.info(f"Please use one of the following commands: {', '.join(COMMANDS)}"))
 
     while True:
         user_input = prompt.ask(">>> Enter command: ").strip()

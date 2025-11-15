@@ -61,9 +61,14 @@ def show_phone_user(args, book: AddressBook):
 
 
 @input_error
-def show_all(book: AddressBook):
+def show_all( book: AddressBook):
     """Show all contacts in the address book."""
-    return str(book)
+    if not book.data:
+        return ("No contacts found.")
+    result = []
+    for record in book.data.values():
+        result.append(str(record))
+    return "\n".join(result)
 
 
 @input_error
@@ -81,7 +86,11 @@ def add_birthday(args, book: AddressBook):
     if len(args) != 2:
         raise ValueError("Usage: add-birthday [name] [DD.MM.YYYY]")
     name, date_str = args
-    return f"Birthday for '{name}' set to {date_str}."
+    record = book.find(name)
+    if not record:
+        return f"Contact '{name}' not found"
+    record.add_birthday(date_str)
+    return f"Birthday '{date_str}' added to contact: '{name}'."
 
 
 @input_error
@@ -98,6 +107,39 @@ def birthdays(args, book: AddressBook):
     """Usage: birthdays [days] (e.g., birthdays 7)"""
     days = int(args[0]) if args else 7
     return f"Upcoming birthdays in the next {days} days: [list of contacts]"
+
+@input_error
+def add_email(args, book:AddressBook):
+    if len(args) != 2:
+        raise ValueError("Usage: add-email [name] [email]")
+    name, email = args
+    name_str = name.capitalize()
+    record = book.find(name_str)
+    if not record:
+        return f"Contact '{name}' not found"
+    
+    record.add_email(email)
+    return f"Email '{email}' added to contact '{name}'."
+
+@input_error
+def  add_address(args, book:AddressBook):
+    pass
+
+@input_error
+def  delete_address(args, book:AddressBook):
+    pass
+
+@input_error
+def   find_address_by_city(args, book:AddressBook):
+    pass
+
+@input_error
+def  search_address_global(args, book:AddressBook):
+    pass
+
+@input_error
+def  show_all_addresses(args, book:AddressBook):
+    pass
 
 
 @input_error
@@ -122,7 +164,7 @@ def add_note(args, notes_book: NotesBook):
 
     tags_message = f" with tags: {tags_input}" if tags_input else ""
 
-    note = Note(title, content)
+    note = Note(title, content, tags=tags_input)
     notes_book.add_note(note)
     return f"Note '{title}' successfully added{tags_message}."
 
