@@ -1,5 +1,2 @@
 colorama>=0.4.6
-Faker==37.11.0
-pip==25.3
-tzdata==2025.2
 prompt_toolkit>=3.0.48
