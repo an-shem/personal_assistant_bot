@@ -20,7 +20,7 @@ class AddressBook(UserDict):
         if name in self.data:
             del self.data[name]
 
-    def get_upcoming_birthdays(self):
+    def get_upcoming_birthdays(self, days=7):
         """
         Returns a list of contacts who should be congratulated
         within the next 7 days, grouped by day.
