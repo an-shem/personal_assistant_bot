@@ -264,16 +264,16 @@ def edit_note(args, notes_book: NotesBook):
         "Enter new content (leave empty to skip): ", enable_completion=False
     ).strip()
 
-    new_tags_input = PROMPT_TOOL.ask(
-        "Enter new tags (will replace old ones, leave empty to skip): ",
-        enable_completion=False,
-    ).strip()
-
     changes = []
 
     if new_content:
         note.edit_content(new_content)
         changes.append("content")
+
+    new_tags_input = PROMPT_TOOL.ask(
+        "Enter new tags (will replace old ones, leave empty to skip): ",
+        enable_completion=False,
+    ).strip()
 
     if new_tags_input:
         note.tags = note._parse_tag(new_tags_input)
@@ -340,7 +340,7 @@ def find_notes_by_tag(args, notes_book: NotesBook):
     if len(args) != 1:
         raise ValueError("Usage: find-tag [tag]")
     tag = args[0]
-    notes = notes_book.search_notes_by_tag(tag)
+    notes = notes_book.search_and_sort_by_tag(tag)
     if not notes:
         return f"No notes found with tag '{tag}'."
     return "---Notes found---\n" + "\n\n".join(str(n) for n in notes)
