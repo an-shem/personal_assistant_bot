@@ -4,6 +4,7 @@ from src.models.address_book import AddressBook
 from src.utils.cli_input import Prompt
 from src.models.phone import Phone
 from src.models.record import Record
+from src.utils.colorizer import Colorizer
 
 
 ALL_COMMANDS = ["add-note", "show-notes", "delete-note", "edit-note", "exit", "help"]
@@ -14,14 +15,14 @@ PROMPT_TOOL = Prompt(commands=ALL_COMMANDS)
 def add_contact(args, book: AddressBook):
     """Add a contact or add phone to existing contact."""
     if len(args) != 2:
-        # raise an exception so the decorator can catch and format a message
         raise ValueError("Invalid input. Use: Add [name] [phone]")
     name, phone = args
     name = name.capitalize()
     try:
         phone_obj = Phone(phone)
-    except ValueError as e:
-        raise ValueError(f"Invalid phone number: {e}")
+    except ValueError:
+        raise 
+    
     record = book.find(name)
     if record is None:
         record = Record(name)
@@ -31,6 +32,39 @@ def add_contact(args, book: AddressBook):
         message = f"Contact '{name}' updated."
     if phone:
         record.add_phone(phone_obj.value)
+        message += f" Phone '{phone_obj.value}'."
+
+    while True:
+        email_input = PROMPT_TOOL.ask("Enter email (optional, type 'skip' to omit):", enable_completion=False).strip()
+        if not email_input or email_input.lower() == 'skip':
+            break 
+        try:
+            record.add_email(email_input)
+            message += f" Email '{email_input}'."
+            break 
+        except ValueError as e:
+            print(Colorizer.warning(f"❌ Email error: {e}. Try again or type 'skip'."))
+            
+    while True:
+        birthday_input = PROMPT_TOOL.ask("Enter birthday (DD.MM.YYYY, optional, type 'skip' to omit):", enable_completion=False).strip()
+        if not birthday_input or birthday_input.lower() == 'skip':
+            break
+        try:
+            record.add_birthday(birthday_input)
+            message += f" Birthday '{birthday_input}'."
+            break 
+        except ValueError as e:
+            print(Colorizer.warning(f"❌ Birthday error: {e}. Try again or type 'skip'."))
+
+
+    address_input = PROMPT_TOOL.ask("Enter full address (optional):", enable_completion=False).strip()
+    if address_input:
+        try:
+            record.add_address(address_input)
+            message += f" Address '{address_input}'."
+        except Exception as e:
+            print(Colorizer.warning(f"⚠️ Address could not be set: {e}. Continuing..."))
+            
     return message
 
 
@@ -141,6 +175,23 @@ def  search_address_global(args, book:AddressBook):
 def  show_all_addresses(args, book:AddressBook):
     pass
 
+@input_error
+def search_contact(args, book: AddressBook):
+    """Usage: search [query]"""
+    if len(args) != 1:
+        raise ValueError("Usage: search [query] to find contacts by any field.")
+    
+    query = args[0]
+    found_records = book.search_all_fields(query)
+    
+    if not found_records:
+        return f"No contacts found '{query}'."
+        
+    output = [f"Found {len(found_records)} contacts '{query}':"]
+    for record in found_records:
+        output.append(str(record))
+        
+    return "\n".join(output)
 
 @input_error
 def add_note(args, notes_book: NotesBook):
@@ -213,16 +264,16 @@ def edit_note(args, notes_book: NotesBook):
         "Enter new content (leave empty to skip): ", enable_completion=False
     ).strip()
 
-    new_tags_input = PROMPT_TOOL.ask(
-        "Enter new tags (will replace old ones, leave empty to skip): ",
-        enable_completion=False,
-    ).strip()
-
     changes = []
 
     if new_content:
         note.edit_content(new_content)
         changes.append("content")
+
+    new_tags_input = PROMPT_TOOL.ask(
+        "Enter new tags (will replace old ones, leave empty to skip): ",
+        enable_completion=False,
+    ).strip()
 
     if new_tags_input:
         note.tags = note._parse_tag(new_tags_input)
@@ -289,7 +340,7 @@ def find_notes_by_tag(args, notes_book: NotesBook):
     if len(args) != 1:
         raise ValueError("Usage: find-tag [tag]")
     tag = args[0]
-    notes = notes_book.search_notes_by_tag(tag)
+    notes = notes_book.search_and_sort_by_tag(tag)
     if not notes:
         return f"No notes found with tag '{tag}'."
     return "---Notes found---\n" + "\n\n".join(str(n) for n in notes)

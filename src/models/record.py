@@ -56,7 +56,7 @@ class Record:
         self.email = Email(email_str)
 
 
-    def add_record(self, street, city, country, house_number=None, apartment=None, postal_code=None):
+    def add_address(self, street, city, country, house_number=None, apartment=None, postal_code=None):
         try:
             address = Address(street, city, country, house_number, apartment, postal_code)
             self.data.append(address)
@@ -64,7 +64,7 @@ class Record:
         except ValueError as e:
             raise ValueError(f"Error creating address: {e}")
     
-    def delete_record(self, address):
+    def delete_address(self, address):
         if address in self.data:
             self.data.remove(address)
             return True

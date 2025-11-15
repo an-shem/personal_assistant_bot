@@ -14,7 +14,7 @@ class Colorizer:
     def colorize(message: str, msg_type: str = INFO) -> str:
         colors = {
             Colorizer.INFO: Fore.CYAN,
-            Colorizer.WARNING: Fore.YELLOW,
+            Colorizer.WARNING: Style.BRIGHT + Fore.YELLOW,
             Colorizer.ERROR: Fore.RED,
             Colorizer.SUCCESS: Fore.GREEN,
             Colorizer.HIGHLIGHT: Fore.MAGENTA + Style.BRIGHT,
