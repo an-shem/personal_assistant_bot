@@ -8,21 +8,20 @@ from src.models.address import Address
 class Record:
     """Represents a contact record containing a name and a list of phone numbers."""
 
-    def __init__(self, name, phone=None, birthday=None, email = None):
+    def __init__(self, name, phone=None, birthday=None, email=None):
         """Initialize the Record with a name and an empty list of phones."""
         self.name = Name(name)
         self.phones = []
         self.birthday = None
-<<<<<<< HEAD
-        self.addresses = []
-=======
         self.email = None
->>>>>>> 1ab899d8c82ec3291d7628e302816632be738700
+        self.addresses = []
 
         if phone:
             self.add_phone(phone)
         if birthday:
             self.add_birthday(birthday)
+        if email:
+            self.add_email(email)
 
     def add_phone(self, number):
         """Add a phone number to the record."""
@@ -82,14 +81,8 @@ class Record:
         """Add an email to the contact"""
         self.email = Email(email_str)
 
-<<<<<<< HEAD
-        return f"Contact name: {self.name.value}, phones: {phones}{b_day_str}"
-    
-    def add_addresses(self, street, city, country, house_number=None, apartment=None, postal_code=None):
-=======
-
     def add_address(self, street, city, country, house_number=None, apartment=None, postal_code=None):
->>>>>>> 1ab899d8c82ec3291d7628e302816632be738700
+        """Add an address to the contact."""
         try:
             address = Address(street, city, country, house_number, apartment, postal_code)
             self.addresses.append(address)
@@ -97,19 +90,15 @@ class Record:
         except ValueError as e:
             raise ValueError(f"Error creating address: {e}")
     
-<<<<<<< HEAD
-    def delete_record(self, address):
+    def remove_address(self, address):
+        """Remove an address from the contact."""
         if address in self.addresses:
             self.addresses.remove(address)
-=======
-    def delete_address(self, address):
-        if address in self.data:
-            self.data.remove(address)
->>>>>>> 1ab899d8c82ec3291d7628e302816632be738700
             return True
         return False
     
     def find_by_city(self, city):
+        """Find addresses by city."""
         results = []
         city_lower = city.lower()
         for address in self.addresses:
@@ -118,6 +107,7 @@ class Record:
         return results
     
     def find_by_country(self, country):
+        """Find addresses by country."""
         results = []
         country_lower = country.lower()
         for address in self.addresses:
@@ -126,6 +116,7 @@ class Record:
         return results
     
     def search_addresses(self, query):
+        """Search addresses by query."""
         query_lower = query.lower()
         results = []
         
@@ -149,6 +140,7 @@ class Record:
         return results
     
     def get_all_addresses(self):
+        """Get all addresses for this contact."""
         return self.addresses.copy()
     
 
@@ -159,14 +151,18 @@ class Record:
         email_str = f", email: {current_email.value}" if current_email else ""
         
         current_birthday = getattr(self, 'birthday', None)
+        birthday_str = ""
         if current_birthday and current_birthday.value:
             birthday_str = f", birthday: {current_birthday.value.strftime(DATE_FORMAT)}"
-        else:
-            birthday_str = ""
+        
+        addresses_str = ""
+        if self.addresses:
+            addresses_str = f", addresses: {len(self.addresses)}" 
 
         return (f"Contact name: {self.name.value}, phones: {phones_str}"
                 f"{email_str}"
-                f"{birthday_str}")
+                f"{birthday_str}"
+                f"{addresses_str}")
 
 
 
