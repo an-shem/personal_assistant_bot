@@ -70,6 +70,53 @@ class AddressBook(UserDict):
     def get_contacts_count(self):
         return len(self.data)
     
+
+    def search_all_fields(self, query: str):
+        """Searches for contacts by all fields: name, phone(s), email(s), birthday, and address."""
+        query_lower = query.lower().strip()
+        results = []
+        
+        if not query_lower:
+            return results
+        
+        query_date = None
+        try:
+            query_date = datetime.strptime(query_lower, DATE_FORMAT).date()
+        except ValueError:
+            pass
+
+        for record in self.data.values():
+
+            if query_date:
+                if hasattr(record, 'birthday') and record.birthday and record.birthday.value:
+                    contact_birthday = record.birthday.value.date()
+                    if contact_birthday == query_date:
+                        results.append(record)
+                        continue
+            
+            if query_lower in record.name.value.lower():
+                results.append(record)
+                continue
+            
+            phone_matches = any(query_lower in phone.value for phone in record.phones)
+            if phone_matches:
+                results.append(record)
+                continue
+
+            if hasattr(record, 'email') and record.email and query_lower in record.email.value.lower():
+                results.append(record)
+                continue
+
+            if hasattr(record, 'birthday') and record.birthday and query_lower in str(record.birthday.value):
+                results.append(record)
+                continue
+
+            if hasattr(record, 'address') and record.address and query_lower in record.address.value.lower():
+                results.append(record)
+                continue
+
+        return results
+
     def __str__(self):
         if not self.data:
             return "Address book is empty"

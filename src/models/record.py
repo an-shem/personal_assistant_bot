@@ -1,18 +1,23 @@
 from src.models.phone import Phone
 from src.models.name import Name
 from src.models.birthday import Birthday
+from src.models.email import Email
 from src.utils.constants import DATE_FORMAT
 from src.models.address import Address
 
 class Record:
     """Represents a contact record containing a name and a list of phone numbers."""
 
-    def __init__(self, name, phone=None, birthday=None):
+    def __init__(self, name, phone=None, birthday=None, email = None):
         """Initialize the Record with a name and an empty list of phones."""
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+<<<<<<< HEAD
         self.addresses = []
+=======
+        self.email = None
+>>>>>>> 1ab899d8c82ec3291d7628e302816632be738700
 
         if phone:
             self.add_phone(phone)
@@ -73,14 +78,18 @@ class Record:
          """Add a birthday to the contact."""
          self.birthday = Birthday(birthday_str)
 
-    def __str__(self):
-        """Return a string representation of the Record."""
-        phones = '; '.join(phone.value for phone in self.phones)
-        b_day_str = f", birthday: {self.birthday.value.strftime(DATE_FORMAT)}" if self.birthday and self.birthday.value else ""
+    def add_email(self, email_str):
+        """Add an email to the contact"""
+        self.email = Email(email_str)
 
+<<<<<<< HEAD
         return f"Contact name: {self.name.value}, phones: {phones}{b_day_str}"
     
     def add_addresses(self, street, city, country, house_number=None, apartment=None, postal_code=None):
+=======
+
+    def add_address(self, street, city, country, house_number=None, apartment=None, postal_code=None):
+>>>>>>> 1ab899d8c82ec3291d7628e302816632be738700
         try:
             address = Address(street, city, country, house_number, apartment, postal_code)
             self.addresses.append(address)
@@ -88,9 +97,15 @@ class Record:
         except ValueError as e:
             raise ValueError(f"Error creating address: {e}")
     
+<<<<<<< HEAD
     def delete_record(self, address):
         if address in self.addresses:
             self.addresses.remove(address)
+=======
+    def delete_address(self, address):
+        if address in self.data:
+            self.data.remove(address)
+>>>>>>> 1ab899d8c82ec3291d7628e302816632be738700
             return True
         return False
     
@@ -136,5 +151,26 @@ class Record:
     def get_all_addresses(self):
         return self.addresses.copy()
     
+
+    def __str__(self):
+        phones_str = '; '.join([p.value for p in self.phones])
+        
+        current_email = getattr(self, 'email', None) 
+        email_str = f", email: {current_email.value}" if current_email else ""
+        
+        current_birthday = getattr(self, 'birthday', None)
+        if current_birthday and current_birthday.value:
+            birthday_str = f", birthday: {current_birthday.value.strftime(DATE_FORMAT)}"
+        else:
+            birthday_str = ""
+
+        return (f"Contact name: {self.name.value}, phones: {phones_str}"
+                f"{email_str}"
+                f"{birthday_str}")
+
+
+
+
+
 
 

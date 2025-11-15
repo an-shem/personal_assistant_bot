@@ -1,4 +1,5 @@
 from functools import wraps
+from src.utils.colorizer import Colorizer
 
 
 def input_error(func):
@@ -7,12 +8,12 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError as e:
-            return f"ValueError: {str(e)}"
+            return Colorizer.error(f"ValueError: {str(e)}")
         except KeyError as e:
-            return f"KeyError: {str(e)}"
+            return Colorizer.error(f"KeyError: {str(e)}")
         except IndexError as e:
-            return f"IndexError: {str(e)}"
+            return Colorizer.error(f"IndexError: {str(e)}")
         except Exception as e:
-            return f"Error: {str(e)}"
+            return Colorizer.error(f"Error: {str(e)}")
 
     return inner
