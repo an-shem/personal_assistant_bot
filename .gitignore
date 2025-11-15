@@ -8,6 +8,8 @@ __pycache__/
 
 # Cash commands history
 src/storage/command_history.txt
+src/storage/addressbook.pkl
+src/storage/notes.pkl
 
 # Distribution / packaging
 .Python
