@@ -12,6 +12,6 @@ class Title(Field):
 
 class Content(Field):
     def __init__(self, value):
-        if len(value) > 255:
-            raise ValueError("Note content cannot exceed 255 characters.")
+        if len(value) > 4096:
+            raise ValueError("Note content cannot exceed 4096 characters.")
         super().__init__(value)

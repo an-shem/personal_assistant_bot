@@ -64,8 +64,6 @@ def main():
             print_commands_table()
         elif command == "add":
             print(Colorizer.success(add_contact(args, book)))
-        elif command == "find":
-            print(Colorizer.success(add_contact(args, book)))
         elif command == "change":
             print(Colorizer.info(change_contact(args, book)))
         elif command == "phone":

@@ -1,4 +1,5 @@
-# Personal Assistant Bot (Python / Neoversity)
+# Personal Assistant Bot JakBot (Python / Neoversity)
+![JakBot](JakBot.png)
 
 Console application-assistant for working with contacts and notes.  
 The project as implemented within the course **Python Programming (Neoversity / GoIT)**.
@@ -175,3 +176,7 @@ Storage files are located in the directory:
         └── validation.py
 ```
 
+[GITHUB](https://github.com/an-shem) Andrii Shemet Team Lead/Developer
+[GITHUB](https://github.com/Gilona-itsme) Ilona Hil Scrum Master/Developer
+[GITHUB](https://github.com/User-Student1) Andrii Shemet Developer
+[GITHUB](https://github.com/Nikita-Sivtsov) Nikita Sivtsov Developer
