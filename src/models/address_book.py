@@ -51,69 +51,95 @@ class AddressBook(UserDict):
             birthday = record.birthday.value.date()
             birthday_this_year = birthday.replace(year=today.year)
 
-            if birthday_this_year < today: # already celebrate
+            if birthday_this_year < today:  # already celebrate
                 birthday_this_year = birthday_this_year.replace(year=today.year + 1)
             if today <= birthday_this_year <= today + timedelta(days=days):
                 if birthday_this_year.weekday() == 5:
                     congratulation_date = birthday_this_year + timedelta(days=2)
-                elif birthday_this_year.weekday() == 6:  
+                elif birthday_this_year.weekday() == 6:
                     congratulation_date = birthday_this_year + timedelta(days=1)
                 else:
                     congratulation_date = birthday_this_year
-                upcoming_birthday.append({
-                'name': record.name.value,
-                'congratulation_date': congratulation_date.strftime(DATE_FORMAT)
-            })
-                
+                upcoming_birthday.append(
+                    {
+                        "name": record.name.value,
+                        "congratulation_date": congratulation_date.strftime(
+                            DATE_FORMAT
+                        ),
+                    }
+                )
+
         return upcoming_birthday
 
     def get_contacts_count(self):
         return len(self.data)
-    
 
     def search_all_fields(self, query: str):
         """Searches for contacts by all fields: name, phone(s), email(s), birthday, and address."""
         query_lower = query.lower().strip()
         results = []
-        
+
         if not query_lower:
             return results
-        
+
         query_date = None
         try:
             query_date = datetime.strptime(query_lower, DATE_FORMAT).date()
         except ValueError:
-            pass
+            query_date = None
 
         for record in self.data.values():
 
+            # 1. точное совпадение по дате рождения, если ввели дату формата DATE_FORMAT
             if query_date:
-                if hasattr(record, 'birthday') and record.birthday and record.birthday.value:
+                if (
+                    hasattr(record, "birthday")
+                    and record.birthday
+                    and record.birthday.value
+                ):
                     contact_birthday = record.birthday.value.date()
                     if contact_birthday == query_date:
                         results.append(record)
                         continue
-            
+
+            # 2. имя
             if query_lower in record.name.value.lower():
                 results.append(record)
                 continue
-            
-            phone_matches = any(query_lower in phone.value for phone in record.phones)
+
+            # 3. телефоны
+            phone_matches = any(
+                query_lower in phone.value.lower() for phone in record.phones
+            )
             if phone_matches:
                 results.append(record)
                 continue
 
-            if hasattr(record, 'email') and record.email and query_lower in record.email.value.lower():
+            # 4. email
+            if (
+                hasattr(record, "email")
+                and record.email
+                and query_lower in record.email.value.lower()
+            ):
                 results.append(record)
                 continue
 
-            if hasattr(record, 'birthday') and record.birthday and query_lower in str(record.birthday.value):
+            # 5. строковое представление дня рождения
+            if (
+                hasattr(record, "birthday")
+                and record.birthday
+                and query_lower in str(record.birthday.value).lower()
+            ):
                 results.append(record)
                 continue
 
-            if hasattr(record, 'address') and record.address and query_lower in record.address.value.lower():
-                results.append(record)
-                continue
+            # 6. адреса
+            if getattr(record, "addresses", None):
+                for address in record.addresses:
+                    full_addr = address.get_full_address().lower()
+                    if query_lower in full_addr:
+                        results.append(record)
+                        break  # переходим к следующему record
 
         return results
 
@@ -121,14 +147,13 @@ class AddressBook(UserDict):
         if not self.data:
             return "Address book is empty"
 
-        result = f"Address Book ({len(self.data)} contacts):\n" 
+        result = f"Address Book ({len(self.data)} contacts):\n"
         result += "=" * 50 + "\n"
         for i, record in enumerate(self.data.values(), 1):
             result += f"\n{i}. {record}\n"
             result += "-" * 50 + "\n"
-        
+
         return result
 
     def __repr__(self):
         return f"AddressBook(contacts={len(self.data)})"
-

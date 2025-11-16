@@ -7,7 +7,41 @@ from src.models.record import Record
 from src.utils.colorizer import Colorizer
 
 
-ALL_COMMANDS = ["add-note", "show-notes", "delete-note", "edit-note", "exit", "help"]
+ALL_COMMANDS = [
+    # system / general
+    "hello",
+    "help",
+    "commands",
+    "close",
+    "exit",
+    # contacts & phones
+    "add",
+    "change",
+    "phone",
+    "search-phone",
+    "all",
+    "delete",
+    "add-birthday",
+    "show-birthday",
+    "birthdays",
+    "add-email",
+    "search",
+    # addresses
+    "add-address",
+    "delete-address",
+    "find-city",
+    "search-address",
+    "show-addresses",
+    # notes
+    "add-note",
+    "show-notes",
+    "find-note",
+    "edit-note",
+    "delete-note",
+    "add-tag",
+    "find-tag",
+]
+
 PROMPT_TOOL = Prompt(commands=ALL_COMMANDS)
 
 
@@ -21,8 +55,8 @@ def add_contact(args, book: AddressBook):
     try:
         phone_obj = Phone(phone)
     except ValueError:
-        raise 
-    
+        raise
+
     record = book.find(name)
     if record is None:
         record = Record(name)
@@ -35,36 +69,118 @@ def add_contact(args, book: AddressBook):
         message += f" Phone '{phone_obj.value}'."
 
     while True:
-        email_input = PROMPT_TOOL.ask("Enter email (optional, type 'skip' to omit):", enable_completion=False).strip()
-        if not email_input or email_input.lower() == 'skip':
-            break 
+        email_input = PROMPT_TOOL.ask(
+            "Enter email (optional, type 'skip' to omit):", enable_completion=False
+        ).strip()
+        if not email_input or email_input.lower() == "skip":
+            break
         try:
             record.add_email(email_input)
             message += f" Email '{email_input}'."
-            break 
+            break
         except ValueError as e:
             print(Colorizer.warning(f"❌ Email error: {e}. Try again or type 'skip'."))
-            
+
     while True:
-        birthday_input = PROMPT_TOOL.ask("Enter birthday (DD.MM.YYYY, optional, type 'skip' to omit):", enable_completion=False).strip()
-        if not birthday_input or birthday_input.lower() == 'skip':
+        birthday_input = PROMPT_TOOL.ask(
+            "Enter birthday (DD.MM.YYYY, optional, type 'skip' to omit):",
+            enable_completion=False,
+        ).strip()
+        if not birthday_input or birthday_input.lower() == "skip":
             break
         try:
             record.add_birthday(birthday_input)
             message += f" Birthday '{birthday_input}'."
-            break 
+            break
         except ValueError as e:
-            print(Colorizer.warning(f"❌ Birthday error: {e}. Try again or type 'skip'."))
+            print(
+                Colorizer.warning(f"❌ Birthday error: {e}. Try again or type 'skip'.")
+            )
 
+    add_address_answer = (
+        PROMPT_TOOL.ask(
+            "Do you want to add an address? (yes/no):", enable_completion=False
+        )
+        .strip()
+        .lower()
+    )
 
-    address_input = PROMPT_TOOL.ask("Enter full address (optional):", enable_completion=False).strip()
-    if address_input:
-        try:
-            record.add_address(address_input)
-            message += f" Address '{address_input}'."
-        except Exception as e:
-            print(Colorizer.warning(f"⚠️ Address could not be set: {e}. Continuing..."))
-            
+    if add_address_answer in ("yes", "y"):
+        street = (
+            PROMPT_TOOL.ask("Enter street:", enable_completion=False)
+            .strip()
+            .capitalize()
+        )
+        if not street:
+            print(
+                Colorizer.warning("⚠️ Street cannot be empty. Address will be skipped.")
+            )
+        else:
+            city = (
+                PROMPT_TOOL.ask("Enter city:", enable_completion=False)
+                .strip()
+                .capitalize()
+            )
+            if not city:
+                print(
+                    Colorizer.warning(
+                        "⚠️ City cannot be empty. Address will be skipped."
+                    )
+                )
+            else:
+                country = (
+                    PROMPT_TOOL.ask("Enter country:", enable_completion=False)
+                    .strip()
+                    .capitalize()
+                )
+                if not country:
+                    print(
+                        Colorizer.warning(
+                            "⚠️ Country cannot be empty. Address will be skipped."
+                        )
+                    )
+                else:
+                    house_number = (
+                        PROMPT_TOOL.ask(
+                            "Enter house number (optional, press Enter to skip):",
+                            enable_completion=False,
+                        ).strip()
+                        or None
+                    )
+
+                    apartment = (
+                        PROMPT_TOOL.ask(
+                            "Enter apartment number (optional, press Enter to skip):",
+                            enable_completion=False,
+                        ).strip()
+                        or None
+                    )
+
+                    postal_code = (
+                        PROMPT_TOOL.ask(
+                            "Enter postal code (optional, press Enter to skip):",
+                            enable_completion=False,
+                        ).strip()
+                        or None
+                    )
+
+                    try:
+                        address = record.add_address(
+                            street=street,
+                            city=city,
+                            country=country,
+                            house_number=house_number,
+                            apartment=apartment,
+                            postal_code=postal_code,
+                        )
+                        message += f" Address '{address}' added."
+                    except Exception as e:
+                        print(
+                            Colorizer.warning(
+                                f"⚠️ Address could not be set: {e}. Continuing..."
+                            )
+                        )
+
     return message
 
 
@@ -79,7 +195,7 @@ def change_contact(args, book: AddressBook):
     record = book.find(name)
     if not record:
         return f"Contact '{name}' not found."
-    
+
     record.edit_phone(old_phone, new_phone)
     new_phone_obj = Phone(new_phone)
     return f"Phone for '{name}' successfully changed to {new_phone_obj.value}."
@@ -103,10 +219,10 @@ def show_phone_user(args, book: AddressBook):
 
 
 @input_error
-def show_all( book: AddressBook):
+def show_all(book: AddressBook):
     """Show all contacts in the address book."""
     if not book.data:
-        return ("No contacts found.")
+        return "No contacts found."
     result = []
     for record in book.data.values():
         result.append(str(record))
@@ -123,7 +239,7 @@ def delete_contact(args, book: AddressBook):
     record = book.find(name)
     if not record:
         return f"Contact '{name}' not found."
-    
+
     book.delete(name)
     return f"Contact '{name}' deleted."
 
@@ -151,10 +267,10 @@ def show_birthday(args, book: AddressBook):
     record = book.find(name)
     if not record:
         return f"Contact '{name}' not found."
-    
+
     if not record.birthday or not record.birthday.value:
         return f"Contact '{name}' has no birthday set."
-    
+
     return f"Birthday for '{name}': {record.birthday.value.strftime('%d.%m.%Y')}"
 
 
@@ -166,11 +282,12 @@ def birthdays(args, book: AddressBook):
     upcoming_birthdays = book.get_upcoming_birthdays(days)
     if not upcoming_birthdays:
         return f"No upcoming birthdays in the next {days} days."
-    
-    result =  f"Upcoming birthdays in the next {days} days:\n"
+
+    result = f"Upcoming birthdays in the next {days} days:\n"
     for birthday_info in upcoming_birthdays:
         result += f"- {birthday_info['name']}: {birthday_info['congratulation_date']}\n"
     return result.strip()
+
 
 @input_error
 def search_by_phone(args, book: AddressBook):
@@ -188,8 +305,10 @@ def search_by_phone(args, book: AddressBook):
         result_str += f"\n{i}. {record}\n"
         result_str += "-" * 50 + "\n"
     return result_str
+
+
 @input_error
-def add_email(args, book:AddressBook):
+def add_email(args, book: AddressBook):
     if len(args) != 2:
         raise ValueError("Usage: add-email [name] [email]")
     name, email = args
@@ -197,47 +316,205 @@ def add_email(args, book:AddressBook):
     record = book.find(name_str)
     if not record:
         return f"Contact '{name}' not found"
-    
+
     record.add_email(email)
     return f"Email '{email}' added to contact '{name}'."
 
-@input_error
-def  add_address(args, book:AddressBook):
-    pass
 
 @input_error
-def  delete_address(args, book:AddressBook):
-    pass
+def add_address(args, book: AddressBook):
+    """Usage: add-address [name] — add a new address to the contact."""
+    if len(args) != 1:
+        raise ValueError("Usage: add-address [name]")
+
+    name = args[0].capitalize()
+    record = book.find(name)
+    if not record:
+        return f"Contact '{name}' not found."
+
+    # Interactive address input (same logic as in add_contact)
+    street = (
+        PROMPT_TOOL.ask("Enter street:", enable_completion=False).strip().capitalize()
+    )
+    if not street:
+        raise ValueError("Street cannot be empty.")
+
+    city = PROMPT_TOOL.ask("Enter city:", enable_completion=False).strip().capitalize()
+    if not city:
+        raise ValueError("City cannot be empty.")
+
+    country = (
+        PROMPT_TOOL.ask("Enter country:", enable_completion=False).strip().capitalize()
+    )
+    if not country:
+        raise ValueError("Country cannot be empty.")
+
+    house_number = (
+        PROMPT_TOOL.ask(
+            "Enter house number (optional, press Enter to skip):",
+            enable_completion=False,
+        ).strip()
+        or None
+    )
+
+    apartment = (
+        PROMPT_TOOL.ask(
+            "Enter apartment number (optional, press Enter to skip):",
+            enable_completion=False,
+        ).strip()
+        or None
+    )
+
+    postal_code = (
+        PROMPT_TOOL.ask(
+            "Enter postal code (optional, press Enter to skip):",
+            enable_completion=False,
+        ).strip()
+        or None
+    )
+
+    address = record.add_address(
+        street=street,
+        city=city,
+        country=country,
+        house_number=house_number,
+        apartment=apartment,
+        postal_code=postal_code,
+    )
+
+    return f"Address added for contact '{name}': {address}"
+
 
 @input_error
-def   find_address_by_city(args, book:AddressBook):
-    pass
+def delete_address(args, book: AddressBook):
+    """Usage: delete-address [name] — delete one of the contact's addresses."""
+    if len(args) != 1:
+        raise ValueError("Usage: delete-address [name]")
+
+    name = args[0].capitalize()
+    record = book.find(name)
+    if not record:
+        return f"Contact '{name}' not found."
+
+    addresses = record.get_all_addresses()
+    if not addresses:
+        return f"Contact '{name}' has no addresses."
+
+    print(f"Addresses for contact '{name}':")
+    for idx, addr in enumerate(addresses, start=1):
+        print(f"  {idx}. {addr}")
+
+    choice_str = PROMPT_TOOL.ask(
+        f"Enter the number of the address to delete (1-{len(addresses)}):",
+        enable_completion=False,
+    ).strip()
+
+    if not choice_str.isdigit():
+        raise ValueError("Address number must be an integer.")
+
+    choice = int(choice_str)
+    if not (1 <= choice <= len(addresses)):
+        raise ValueError(f"Address number must be between 1 and {len(addresses)}.")
+
+    address_to_delete = addresses[choice - 1]
+
+    if record.remove_address(address_to_delete):
+        return f"Address #{choice} deleted for contact '{name}'."
+    else:
+        return "Failed to delete the address. It was not found in the contact."
+
 
 @input_error
-def  search_address_global(args, book:AddressBook):
-    pass
+def find_address_by_city(args, book: AddressBook):
+    """Usage: find-city [city] — find all addresses in a given city."""
+    if len(args) != 1:
+        raise ValueError("Usage: find-city [city]")
+
+    city = args[0]
+    results = []
+
+    for name, record in book.data.items():
+        matches = record.find_by_city(city)
+        for addr in matches:
+            results.append((name, addr))
+
+    if not results:
+        return f"No addresses found in city '{city}'."
+
+    lines = [f"Addresses found in city '{city}':", "-" * 50]
+    for contact_name, address in results:
+        lines.append(f"{contact_name}: {address}")
+    return "\n".join(lines)
+
 
 @input_error
-def  show_all_addresses(args, book:AddressBook):
-    pass
+def search_address_global(args, book: AddressBook):
+    """Usage: search-address [query] — search in all addresses of all contacts."""
+    if not args:
+        raise ValueError("Usage: search-address [query]")
+
+    query = " ".join(args).strip()
+    if not query:
+        raise ValueError("Search query cannot be empty.")
+
+    results = []
+
+    for name, record in book.data.items():
+        matches = record.search_addresses(query)
+        for addr in matches:
+            results.append((name, addr))
+
+    if not results:
+        return f"No addresses found matching '{query}'."
+
+    lines = [f"Addresses matching '{query}':", "-" * 50]
+    for contact_name, address in results:
+        lines.append(f"{contact_name}: {address}")
+    return "\n.join(lines)"
+
+
+@input_error
+def show_all_addresses(args, book: AddressBook):
+    """Usage: show-addresses — show all addresses for all contacts."""
+    if args:
+        raise ValueError("Usage: show-addresses")
+
+    lines = []
+
+    for name, record in book.data.items():
+        addresses = record.get_all_addresses()
+        if not addresses:
+            continue
+
+        lines.append(f"Contact: {name}")
+        for idx, addr in enumerate(addresses, start=1):
+            lines.append(f"  {idx}. {addr}")
+        lines.append("-" * 50)
+
+    if not lines:
+        return "There are no addresses saved yet."
+
+    return "\n".join(lines)
+
 
 @input_error
 def search_contact(args, book: AddressBook):
     """Usage: search [query]"""
     if len(args) != 1:
         raise ValueError("Usage: search [query] to find contacts by any field.")
-    
+
     query = args[0]
     found_records = book.search_all_fields(query)
-    
+
     if not found_records:
         return f"No contacts found '{query}'."
-        
+
     output = [f"Found {len(found_records)} contacts '{query}':"]
     for record in found_records:
         output.append(str(record))
-        
+
     return "\n".join(output)
+
 
 @input_error
 def add_note(args, notes_book: NotesBook):
@@ -359,10 +636,12 @@ def add_tags_to_note(args, notes_book: NotesBook):
         title = args[0]
         tags_input = " ".join(args[1:])
     else:
-        title = PROMPT_TOOL.ask("Enter the title of the note to add tags to: ", enable_completion=False).strip()
+        title = PROMPT_TOOL.ask(
+            "Enter the title of the note to add tags to: ", enable_completion=False
+        ).strip()
         if not title:
             raise ValueError("Note title cannot be empty.")
-        tags_input = "" 
+        tags_input = ""
 
     note = notes_book.find_note_by_title(title)
     if not note:

@@ -2,9 +2,11 @@ DATE_FORMAT = "%d.%m.%Y"
 
 COMMANDS_INFO = {
     "hello": "Greets the user",
+    "help": "Shows all available commands",
     "add": "Add a new contact",
     "change": "Change an existing phone",
     "phone": "Show phone(s) of a contact",
+    "search-phone": "Search contacts by phone number.",
     "all": "Show all contacts",
     "delete": "Delete a contact",
     "search": "Search contacts by keyword",

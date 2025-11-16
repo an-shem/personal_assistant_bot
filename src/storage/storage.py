@@ -1,10 +1,14 @@
-import os
+from pathlib import Path
 import pickle
 from src.models.address_book import AddressBook
 from src.models.notes_book import NotesBook
 
-CONTACTS_FILE = os.path.join("src", "storage", "addressbook.pkl")
-NOTES_FILE = os.path.join("src", "storage", "notes.pkl")
+
+BASE_DIR = Path.home() / ".personal_assistant"
+BASE_DIR.mkdir(exist_ok=True)
+
+CONTACTS_FILE = BASE_DIR / "addressbook.pkl"
+NOTES_FILE = BASE_DIR / "notes.pkl"
 
 
 def save_data(book: AddressBook, notes: NotesBook):
