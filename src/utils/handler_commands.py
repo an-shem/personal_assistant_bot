@@ -106,13 +106,21 @@ def add_contact(args, book: AddressBook):
     )
 
     if add_address_answer in ("yes", "y"):
-        street = PROMPT_TOOL.ask("Enter street:", enable_completion=False).strip()
+        street = (
+            PROMPT_TOOL.ask("Enter street:", enable_completion=False)
+            .strip()
+            .capitalize()
+        )
         if not street:
             print(
                 Colorizer.warning("⚠️ Street cannot be empty. Address will be skipped.")
             )
         else:
-            city = PROMPT_TOOL.ask("Enter city:", enable_completion=False).strip()
+            city = (
+                PROMPT_TOOL.ask("Enter city:", enable_completion=False)
+                .strip()
+                .capitalize()
+            )
             if not city:
                 print(
                     Colorizer.warning(
@@ -120,9 +128,11 @@ def add_contact(args, book: AddressBook):
                     )
                 )
             else:
-                country = PROMPT_TOOL.ask(
-                    "Enter country:", enable_completion=False
-                ).strip()
+                country = (
+                    PROMPT_TOOL.ask("Enter country:", enable_completion=False)
+                    .strip()
+                    .capitalize()
+                )
                 if not country:
                     print(
                         Colorizer.warning(
@@ -323,15 +333,19 @@ def add_address(args, book: AddressBook):
         return f"Contact '{name}' not found."
 
     # Interactive address input (same logic as in add_contact)
-    street = PROMPT_TOOL.ask("Enter street:", enable_completion=False).strip()
+    street = (
+        PROMPT_TOOL.ask("Enter street:", enable_completion=False).strip().capitalize()
+    )
     if not street:
         raise ValueError("Street cannot be empty.")
 
-    city = PROMPT_TOOL.ask("Enter city:", enable_completion=False).strip()
+    city = PROMPT_TOOL.ask("Enter city:", enable_completion=False).strip().capitalize()
     if not city:
         raise ValueError("City cannot be empty.")
 
-    country = PROMPT_TOOL.ask("Enter country:", enable_completion=False).strip()
+    country = (
+        PROMPT_TOOL.ask("Enter country:", enable_completion=False).strip().capitalize()
+    )
     if not country:
         raise ValueError("Country cannot be empty.")
 
