@@ -23,18 +23,24 @@ from src.utils.handler_commands import (
     edit_note,
     add_tags_to_note,
     find_notes_by_tag,
+    search_by_phone,
 )
 from src.storage.storage import save_data, load_data
 from src.utils.cli_input import Prompt
 from src.utils.constants import COMMANDS_INFO
-from src.utils.tabulate_helpers import show_commands as print_commands_table, show_contacts_table
+from src.utils.tabulate_helpers import (
+    show_commands as print_commands_table,
+    show_contacts_table,
+)
 
 
 def main():
     # Creating a new address book
     book, notes = load_data()
 
-    prompt = Prompt(commands=COMMANDS_INFO, history_file="src/storage/command_history.txt")
+    prompt = Prompt(
+        commands=COMMANDS_INFO, history_file="src/storage/command_history.txt"
+    )
 
     print(Colorizer.highlight("📘 Welcome to the Assistant Bot!"))
     print_commands_table()
@@ -63,7 +69,7 @@ def main():
         elif command == "phone":
             print(Colorizer.highlight(show_phone_user(args, book)))
         elif command == "all":
-            contacts = list(book.data.values())     
+            contacts = list(book.data.values())
             show_contacts_table(contacts)
         elif command == "delete":
             print(Colorizer.warning(delete_contact(args, book)))
@@ -81,6 +87,8 @@ def main():
             print(Colorizer.info(search_address_global(args, book)))
         elif command == "show-addresses":
             print(Colorizer.highlight(show_all_addresses(args, book)))
+        elif command == "search-phone":
+            print(Colorizer.info(search_by_phone(args, book)))
         elif command == "show-birthday":
             print(Colorizer.highlight(show_birthday(args, book)))
         elif command == "birthdays":
@@ -103,7 +111,11 @@ def main():
         elif command == "find-tag":
             print(Colorizer.info(find_notes_by_tag(args, notes)))
         else:
-            print(Colorizer.error("❌ Invalid command. Type 'info' to see available options."))
+            print(
+                Colorizer.error(
+                    "❌ Invalid command. Type 'info' to see available options."
+                )
+            )
 
 
 if __name__ == "__main__":

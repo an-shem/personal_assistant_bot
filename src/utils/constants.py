@@ -5,6 +5,7 @@ COMMANDS_INFO = {
     "add": "Add a new contact",
     "change": "Change an existing phone",
     "phone": "Show phone(s) of a contact",
+    "search-phone": "Search contacts by phone number.",
     "all": "Show all contacts",
     "delete": "Delete a contact",
     "search": "Search contacts by keyword",
