@@ -1,55 +1,55 @@
 # Personal Assistant Bot (Python / Neoversity)
 
-Консольний застосунок-помічник для роботи з контактами та нотатками.  
-Проєкт реалізований у межах курсу **Python Programming (Neoversity / GoIT)**.
+Console application-assistant for working with contacts and notes.  
+The project as implemented within the course **Python Programming (Neoversity / GoIT)**.
 
 ---
 
-## 📌 Основні можливості
+## 📌 Main features
 
-### 📇 Контакти
+### 📇 Contacts
 
-- Додавання контакту з:
-  - ім'ям;
-  - одним або кількома телефонами;
-  - e-mail;
-  - датою народження;
-  - одним або кількома поштовими адресами.
-- Пошук контактів:
-  - за іменем;
-  - за номером телефону;
-  - за будь-яким полем (ім’я, телефон, e-mail, ДН, адреса).
-- Редагування та видалення контактів.
-- Додавання/видалення адрес.
-- Пошук контактів за містом.
-- Відображення всіх контактів у вигляді таблиці.
-- Показ найближчих днів народження (наприклад, на 7 днів уперед).
+- Adding a contact with:
+  - a name;
+  - one or more phone numbers;
+  - an e-mail address;
+  - a date of birth;
+  - one or more postal addresses.
+- Searching for contacts:
+  - by name;
+  - by phone number;
+  - by any field (name, phone, e-mail, DOB, address).
+- Editing and deleting contacts.
+- Adding/deleting addresses.
+- Searching for contacts by city.
+- Displaying all contacts in a table format.
+- Showing upcoming birthdays (e.g., for the next 7 days).
 
-### 📝 Нотатки
+### 📝 Notes
 
-- Додавання, перегляд, редагування та видалення нотаток.
-- Пошук нотаток за заголовком.
-- Додавання тегів до нотатки.
-- Пошук нотаток за тегами.
-- Сортування результатів за кількістю тегів.
+- Adding, viewing, editing and deleting notes.
+- Search notes by title.
+- Adding tags to a note.
+- Search notes by tag.
+- Sorting results by number of tags.
 
-### 💾 Збереження даних
+### 💾 Data storage
 
-- Контакти та нотатки **зберігаються між запусками**.
-- Використовується модуль `pickle`.
+- Contacts and notes **stored between launches**.
+- The module is used `pickle`.
 
 ---
 
-## 🔧 Вимоги
+## 🔧 Requirements
 
 - Python **3.10+**
-- Підтримувані ОС: Windows / Linux / macOS
+- Supported OS: Windows /Linux /macOS
 
 ---
 
-## 📥 Встановлення
+## 📥 Installation
 
-### 1. Клонування репозиторію
+### 1. Repository cloning
 
 ```bash
 git clone https://github.com/an-shem/ppersonal_assistant_bot.git
@@ -57,7 +57,7 @@ cd personal_assistant_bot
 ```
 
 
-### 2. Створення та активація віртуального середовища (рекомендовано)
+### 2. Creation and activation of a virtual environment (recommended)
 `python -m venv venv`
 
 ## Linux / macOS:
@@ -66,71 +66,70 @@ cd personal_assistant_bot
 ## Windows:
 `.venv\Scripts\activate`
 
-### 3. Встановлення залежностей
+### 3. Setting dependencies
 `pip install -r requirements.txt`
 
-### 4. ▶️ Запуск застосунку
+### 4. ▶️ Launching the application
 `python main.py`
 
+## 🧭 Basic commands
+### 🔹 Systemic
 
-## 🧭 Основні команди
-### 🔹 Системні
-| Команда          | Опис                               |
-| ---------------- | ---------------------------------- |
-| `hello`          | Привітання.                        |
-| `help`           | Показує список доступних команд.   |
-| `exit` / `close` | Зберегти дані та завершити роботу. |
+| Command          | Description                             |
+| ---------------- | --------------------------------------- |
+| `hello`          | Greeting.                               |
+| `help`           | Shows the list of available commands.   |
+| `exit` / `close` | Save data and terminate the application. |
 
-### 🔹 Робота з контактами
-| Команда         | Опис                                     |
-| --------------- | ---------------------------------------- |
-| `add`           | Додати новий контакт.                    |
-| `change`        | Змінити номер телефону.                  |
-| `phone`         | Показати телефони контакту.              |
-| `search-phone`  | Пошук за номером телефону.               |
-| `all`           | Показати всі контакти у вигляді таблиці. |
-| `delete`        | Видалити контакт.                        |
-| `search`        | Пошук контакту за будь-яким полем.       |
-| `add-email`     | Додати e-mail.                           |
-| `add-birthday`  | Додати дату народження.                  |
-| `show-birthday` | Показати дату народження.                |
-| `birthdays`     | Контакти з ДН у найближчі N днів.        |
+### 🔹 Working with contacts
+| Command         | Description                                     |
+| --------------- | ----------------------------------------------- |
+| `add`           | Add a new contact.                              |
+| `change`        | Change the phone number.                        |
+| `phone`         | Show the contact's phone numbers.               |
+| `search-phone`  | Search by phone number.                         |
+| `all`           | Show all contacts in a table format.            |
+| `delete`        | Delete a contact.                               |
+| `search`        | Search for a contact by any field.              |
+| `add-email`     | Add an e-mail.                                  |
+| `add-birthday`  | Add a date of birth.                            |
+| `show-birthday` | Show the date of birth.                         |
+| `birthdays`     | Contacts with birthdays in the next N days.     |
 
-### 🔹 Робота з адресами
-| Команда          | Опис                             |
-| ---------------- | -------------------------------- |
-| `add-address`    | Додати адресу.                   |
-| `delete-address` | Видалити адресу.                 |
-| `find-city`      | Знайти контакти за містом.       |
-| `search-address` | Пошук адреси за ключовим словом. |
-| `show-addresses` | Показати всі адреси.             |
+### 🔹 Working with addresses
+| Command          | Description                          |
+| ---------------- | ------------------------------------ |
+| `add-address`    | Add an address.                      |
+| `delete-address` | Delete an address.                   |
+| `find-city`      | Find contacts by city.               |
+| `search-address` | Search for an address by keyword.    |
+| `show-addresses` | Show all addresses.                  |
 
-### 🔹 Робота з нотатками
-| Команда       | Опис                          |
-| ------------- | ----------------------------- |
-| `add-note`    | Додати нотатку.               |
-| `show-notes`  | Показати всі нотатки.         |
-| `find-note`   | Знайти нотатку за заголовком. |
-| `edit-note`   | Редагувати нотатку.           |
-| `delete-note` | Видалити нотатку.             |
-| `add-tag`     | Додати тег(и) до нотатки.     |
-| `find-tag`    | Знайти нотатки за тегом.      |
+### 🔹 Working with notes
+| Command       | Description                      |
+| ------------- | -------------------------------- |
+| `add-note`    | Add a note.                      |
+| `show-notes`  | Show all notes.                  |
+| `find-note`   | Find a note by title.            |
+| `edit-note`   | Edit a note.                     |
+| `delete-note` | Delete a note.                   |
+| `add-tag`     | Add tag(s) to a note.            |
+| `find-tag`    | Find notes by tag.               |
 
 
-
-## 🧾 Приклади використання
-### ➕ Додати контакт
+## 🧾 Examples of using
+### ➕ Add a contact
 `add John 0501234567`
-Далі майстер запропонує додати e-mail, ДН, адресу.
+Next, the JekBot will offer to add e-mail, DN, address.
 
-### 🔍 Пошук
+### 🔍 Search
 ```
 search John
 search 0501
 search Berlin
 search john@example.com
 ```
-### 📝 Нотатки
+### 📝 Notes
 ```
 add-note
 add-tag "Shopping list" #food #home
@@ -138,16 +137,16 @@ find-tag food
 ```
 
 
-## 💽 Де зберігаються дані
-Файли зберігання розташовані у директорії:
+## 💽 Where the data is stored
+Storage files are located in the directory:
 `src/storage/`
 
-## Файли:
-- `addressbook.pkl` — збережені контакти
-- `notes.pkl` — збережені нотатки
+## Files:
+- `addressbook.pkl` — saved contacts
+- `notes.pkl` — saved notes
 
 
-## 🗂 Структура проєкту
+## 🗂 Project structure
 
 ```text
 .
