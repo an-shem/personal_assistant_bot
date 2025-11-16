@@ -90,7 +90,7 @@ class AddressBook(UserDict):
 
         for record in self.data.values():
 
-            # 1. точное совпадение по дате рождения, если ввели дату формата DATE_FORMAT
+
             if query_date:
                 if (
                     hasattr(record, "birthday")
@@ -102,12 +102,12 @@ class AddressBook(UserDict):
                         results.append(record)
                         continue
 
-            # 2. имя
+
             if query_lower in record.name.value.lower():
                 results.append(record)
                 continue
 
-            # 3. телефоны
+
             phone_matches = any(
                 query_lower in phone.value.lower() for phone in record.phones
             )
@@ -115,7 +115,7 @@ class AddressBook(UserDict):
                 results.append(record)
                 continue
 
-            # 4. email
+
             if (
                 hasattr(record, "email")
                 and record.email
@@ -124,7 +124,6 @@ class AddressBook(UserDict):
                 results.append(record)
                 continue
 
-            # 5. строковое представление дня рождения
             if (
                 hasattr(record, "birthday")
                 and record.birthday
@@ -132,14 +131,13 @@ class AddressBook(UserDict):
             ):
                 results.append(record)
                 continue
-
-            # 6. адреса
+            
             if getattr(record, "addresses", None):
                 for address in record.addresses:
                     full_addr = address.get_full_address().lower()
                     if query_lower in full_addr:
                         results.append(record)
-                        break  # переходим к следующему record
+                        break 
 
         return results
 
