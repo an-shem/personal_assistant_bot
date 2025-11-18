@@ -192,6 +192,20 @@ def add_contact(args, book: AddressBook):
 
 
 @input_error
+def find_contact(args, book: AddressBook):
+    """Usage: find [name]"""
+    if len(args) != 1:
+        raise ValueError("Usage: find [name]")
+    name = args[0]
+    name = name.capitalize()
+
+    record = book.find(name)
+    if not record:
+        return []
+    return [record]
+
+
+@input_error
 def change_contact(args, book: AddressBook):
     """Usage: change [name] [old_phone] [new_phone]"""
     if len(args) != 3:
@@ -506,19 +520,16 @@ def show_all_addresses(args, book: AddressBook):
 def search_contact(args, book: AddressBook):
     """Usage: search [query]"""
     if len(args) != 1:
-        raise ValueError("Usage: search [query] to find contacts by any field.")
+        raise ValueError("Usage: search [query] (to find contacts by any field)")
 
     query = args[0]
     found_records = book.search_all_fields(query)
 
     if not found_records:
-        return f"No contacts found '{query}'."
+        return []
 
     output = [f"Found {len(found_records)} contact(s) '{query}':"]
-    # for record in found_records:
-    #     output.append(str(record))
     print(output[0])
-    # return "\n".join(output)
     return found_records
 
 

@@ -4,8 +4,8 @@ from src.utils.handler_commands import (
     add_contact,
     change_contact,
     delete_contact,
+    find_contact,
     show_phone_user,
-    show_all,
     add_email,
     add_birthday,
     show_birthday,
@@ -64,6 +64,16 @@ def main():
             print_commands_table()
         elif command == "add":
             print(Colorizer.success(add_contact(args, book)))
+        elif command == "find":
+            result = find_contact(args, book)
+            # Если вернулся список записей – рисуем таблицу
+            if isinstance(result, list):
+                show_contacts_table(result)
+            # Если вернулась строка (сообщение об ошибке или подсказка использования)
+            elif isinstance(result, str):
+                print(result)
+            # contact = find_contact(args, book)
+            # show_contacts_table(contact)
         elif command == "change":
             print(Colorizer.info(change_contact(args, book)))
         elif command == "phone":
@@ -94,9 +104,15 @@ def main():
         elif command == "birthdays":
             print(Colorizer.info(birthdays(args, book)))
         elif command == "search":
-            # print(Colorizer.info(search_contact(args, book)))
-            contacts = search_contact(args, book)
-            show_contacts_table(contacts)
+            result = search_contact(args, book)
+            # Если вернулся список записей – рисуем таблицу
+            if isinstance(result, list):
+                show_contacts_table(result)
+            # Если вернулась строка (сообщение об ошибке или подсказка использования)
+            elif isinstance(result, str):
+                print(result)
+            # contacts = search_contact(args, book)
+            # show_contacts_table(contacts)
         elif command == "add-note":
             print(Colorizer.success(add_note(args, notes)))
         elif command == "show-notes":
