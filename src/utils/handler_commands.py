@@ -241,7 +241,7 @@ def show_phone_user(args, book: AddressBook):
 
 
 @input_error
-def delete_pfone(args, book: AddressBook):
+def delete_phone(args, book: AddressBook):
     """Usage: delete-phone [name] — delete one of the contact's phones."""
     if len(args) != 1:
         raise ValueError("Usage: delete-phone [name]")

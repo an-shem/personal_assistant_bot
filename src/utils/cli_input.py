@@ -18,7 +18,9 @@ class Prompt:
     def __init__(self, commands=None, history_file="src/storage/command_history.txt"):
 
         self.commands = commands or []
-        self.completer = WordCompleter(self.commands, ignore_case=True)
+        commands_for_completer = [item[0] for item in self.commands]
+
+        self.completer = WordCompleter(commands_for_completer, ignore_case=True)
 
         self.session = PromptSession(history=FileHistory(history_file))
 

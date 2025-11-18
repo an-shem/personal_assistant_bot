@@ -1,33 +1,40 @@
 DATE_FORMAT = "%d.%m.%Y"
 
-COMMANDS_INFO = {
-    "hello": "Greets the user",
-    "help": "Shows all available commands",
-    "add [name]": "Add a new contact",
-    "find [name]": "Find contact by name",
-    "change [name] [old_phone] [new_phone]": "Change an existing phone",
-    "phone [name]": "Show phone(s) of a contact",
-    "delete-phone [name]": "Delete contact phone number",
-    "search-phone [phone]": "Search contacts by phone number.",
-    "all": "Show all contacts",
-    "delete [name]": "Delete a contact",
-    "search [keyword]": "Search contacts by keyword",
-    "add-email [name] [email/new_email]": "Add/change an email to a contact",
-    "add-birthday [name] [DD.MM.YYYY]": "Add/change a birthday date",
-    "show-birthday [name]": "Show birthday for a contact",
-    "birthdays [days]": "Show birthdays in the next N days (default: 7)",
-    "add-address [name]": "Add an address to a contact",
-    "delete-address [name]": "Delete address from a contact",
-    "find-city [city]": "Find contacts by city",
-    "search-address [query]": "Search addresses by query",
-    "show-addresses": "Show all addresses",
-    "add-note": "Add a new note",
-    "show-notes": "Show all notes",
-    "find-note": "Find notes by title",
-    "edit-note": "Edit a note",
-    "delete-note": "Delete a note",
-    "add-tag": "Add a tag to a note",
-    "find-tag [tag]": "Find notes by tag",
-    "exit": "Exit the assistant",
-    "close": "Exit the assistant",
-}
+COMMANDS_INFO = [
+    ("hello", "hello", "Greets the user"),
+    ("help", "help", "Shows all available commands"),
+
+    ("add", "add [name]", "Add a new contact"),
+    ("find", "find [name]", "Find contact by name"),
+    ("change", "change [name] [old_phone] [new_phone]", "Change an existing phone"),
+    ("phone", "phone [name]", "Show phone(s) of a contact"),
+    ("delete-phone", "delete-phone [name]", "Delete contact phone number"),
+    ("search-phone", "search-phone [phone]", "Search contacts by phone number"),
+
+    ("all", "all", "Show all contacts"),
+    ("delete", "delete [name]", "Delete a contact"),
+    ("search", "search [keyword]", "Search contacts by keyword"),
+
+    ("add-email", "add-email [name] [email/new_email]", "Add/change an email"),
+    ("add-birthday", "add-birthday [name] [DD.MM.YYYY]", "Add/change a birthday date"),
+    ("show-birthday", "show-birthday [name]", "Show birthday for a contact"),
+    ("birthdays", "birthdays/birthdays [days]", "Show birthdays in next N days (default 7)"),
+
+    ("add-address", "add-address [name]", "Add an address to a contact"),
+    ("delete-address", "delete-address [name]", "Delete a contact address"),
+    ("find-city", "find-city [city]", "Find contacts by city"),
+    ("search-address", "search-address [query]", "Search in all addresses"),
+    ("show-addresses", "show-addresses", "Show all addresses"),
+
+    ("add-note", "add-note", "Add a new note"),
+    ("show-notes", "show-notes", "Show all notes"),
+    ("find-note", "find-note [title]", "Find notes by title"),
+    ("edit-note", "edit-note", "Edit a note"),
+    ("delete-note", "delete-note", "Delete a note"),
+
+    ("add-tag", "add-tag [title] [tag]", "Add a tag to a note"),
+    ("find-tag", "find-tag [tag]", "Find notes by tag"),
+
+    ("exit", "exit", "Exit the assistant"),
+    ("close", "close", "Exit the assistant"),
+]

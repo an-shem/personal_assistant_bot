@@ -7,10 +7,11 @@ from src.utils.constants import DATE_FORMAT
 def show_commands():
     table = []
 
-    for cmd, description in COMMANDS_INFO.items():
+    for cmd, usg, description in COMMANDS_INFO:
         colored_cmd = Colorizer.highlight(cmd)
-        colored_desc = Colorizer.info(description)
-        table.append([colored_cmd, colored_desc])
+        colored_usg = Colorizer.info(usg)
+        colored_desc = Colorizer.commandline(description)
+        table.append([colored_cmd, colored_usg, colored_desc])
 
     print(Colorizer.success("\nAvailable commands:\n"))
     print(
@@ -18,6 +19,7 @@ def show_commands():
             table,
             headers=[
                 Colorizer.commandline("Command"),
+                Colorizer.commandline("Usage"),
                 Colorizer.commandline("Description"),
             ],
             tablefmt="grid",
