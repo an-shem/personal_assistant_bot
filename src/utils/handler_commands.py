@@ -56,130 +56,137 @@ def add_contact(args, book: AddressBook):
         phone_obj = Phone(phone)
     except ValueError:
         raise
-
+    # message = ""
     record = book.find(name)
-    if record is None:
+    not_record = record is None
+    if not_record:
         record = Record(name)
         book.add_record(record)
-        message = f"Contact '{name}' added."
+        message = f"Contact '{name}' added.\n"
     else:
-        message = f"Contact '{name}' updated."
+        message = f"Contact '{name}' updated.\n"
     if phone:
         record.add_phone(phone_obj.value)
-        message += f" Phone '{phone_obj.value}'."
+        message += f" Phone: '{phone_obj.value}'.\n"
+    if not_record:
+        while True:
+            email_input = PROMPT_TOOL.ask(
+                "Enter email (optional, type 'skip' to omit):", enable_completion=False
+            ).strip()
+            if not email_input or email_input.lower() == "skip":
+                break
+            try:
+                record.add_email(email_input)
+                message += f" Email: '{email_input}'.\n"
+                break
+            except ValueError as e:
+                print(
+                    Colorizer.warning(f"❌ Email error: {e}. Try again or type 'skip'.")
+                )
 
-    while True:
-        email_input = PROMPT_TOOL.ask(
-            "Enter email (optional, type 'skip' to omit):", enable_completion=False
-        ).strip()
-        if not email_input or email_input.lower() == "skip":
-            break
-        try:
-            record.add_email(email_input)
-            message += f" Email '{email_input}'."
-            break
-        except ValueError as e:
-            print(Colorizer.warning(f"❌ Email error: {e}. Try again or type 'skip'."))
+        while True:
+            birthday_input = PROMPT_TOOL.ask(
+                "Enter birthday (DD.MM.YYYY, optional, type 'skip' to omit):",
+                enable_completion=False,
+            ).strip()
+            if not birthday_input or birthday_input.lower() == "skip":
+                break
+            try:
+                record.add_birthday(birthday_input)
+                message += f" Birthday: '{birthday_input}'.\n"
+                break
+            except ValueError as e:
+                print(
+                    Colorizer.warning(
+                        f"❌ Birthday error: {e}. Try again or type 'skip'."
+                    )
+                )
 
-    while True:
-        birthday_input = PROMPT_TOOL.ask(
-            "Enter birthday (DD.MM.YYYY, optional, type 'skip' to omit):",
-            enable_completion=False,
-        ).strip()
-        if not birthday_input or birthday_input.lower() == "skip":
-            break
-        try:
-            record.add_birthday(birthday_input)
-            message += f" Birthday '{birthday_input}'."
-            break
-        except ValueError as e:
-            print(
-                Colorizer.warning(f"❌ Birthday error: {e}. Try again or type 'skip'.")
+        add_address_answer = (
+            PROMPT_TOOL.ask(
+                "Do you want to add an address? (yes/no):", enable_completion=False
             )
-
-    add_address_answer = (
-        PROMPT_TOOL.ask(
-            "Do you want to add an address? (yes/no):", enable_completion=False
-        )
-        .strip()
-        .lower()
-    )
-
-    if add_address_answer in ("yes", "y"):
-        street = (
-            PROMPT_TOOL.ask("Enter street:", enable_completion=False)
             .strip()
-            .capitalize()
+            .lower()
         )
-        if not street:
-            print(
-                Colorizer.warning("⚠️ Street cannot be empty. Address will be skipped.")
-            )
-        else:
-            city = (
-                PROMPT_TOOL.ask("Enter city:", enable_completion=False)
+
+        if add_address_answer in ("yes", "y"):
+            country = (
+                PROMPT_TOOL.ask("Enter country:", enable_completion=False)
                 .strip()
                 .capitalize()
             )
-            if not city:
+            if not country:
                 print(
                     Colorizer.warning(
-                        "⚠️ City cannot be empty. Address will be skipped."
+                        "⚠️ Country cannot be empty. Address will be skipped."
                     )
                 )
             else:
-                country = (
-                    PROMPT_TOOL.ask("Enter country:", enable_completion=False)
+                city = (
+                    PROMPT_TOOL.ask("Enter city:", enable_completion=False)
                     .strip()
                     .capitalize()
                 )
-                if not country:
+                if not city:
                     print(
                         Colorizer.warning(
-                            "⚠️ Country cannot be empty. Address will be skipped."
+                            "⚠️ City cannot be empty. Address will be skipped."
                         )
                     )
                 else:
-                    house_number = (
-                        PROMPT_TOOL.ask(
-                            "Enter house number (optional, press Enter to skip):",
-                            enable_completion=False,
-                        ).strip()
-                        or None
+                    street = (
+                        PROMPT_TOOL.ask("Enter street:", enable_completion=False)
+                        .strip()
+                        .title()
                     )
-
-                    apartment = (
-                        PROMPT_TOOL.ask(
-                            "Enter apartment number (optional, press Enter to skip):",
-                            enable_completion=False,
-                        ).strip()
-                        or None
-                    )
-
-                    postal_code = (
-                        PROMPT_TOOL.ask(
-                            "Enter postal code (optional, press Enter to skip):",
-                            enable_completion=False,
-                        ).strip()
-                        or None
-                    )
-
-                    try:
-                        address = record.add_address(
-                            street=street,
-                            city=city,
-                            country=country,
-                            house_number=house_number,
-                            apartment=apartment,
-                            postal_code=postal_code,
-                        )
-                        message += f" Address '{address}' added."
-                    except Exception as e:
+                    if not street:
                         print(
                             Colorizer.warning(
-                                f"⚠️ Address could not be set: {e}. Continuing..."
+                                "⚠️ Street cannot be empty. Address will be skipped."
                             )
                         )
+                    else:
+                        house_number = (
+                            PROMPT_TOOL.ask(
+                                "Enter house number (optional, press Enter to skip):",
+                                enable_completion=False,
+                            ).strip()
+                            or None
+                        )
+
+                        apartment = (
+                            PROMPT_TOOL.ask(
+                                "Enter apartment number (optional, press Enter to skip):",
+                                enable_completion=False,
+                            ).strip()
+                            or None
+                        )
+
+                        postal_code = (
+                            PROMPT_TOOL.ask(
+                                "Enter postal code (optional, press Enter to skip):",
+                                enable_completion=False,
+                            ).strip()
+                            or None
+                        )
+
+                        try:
+                            address = record.add_address(
+                                street=street,
+                                city=city,
+                                country=country,
+                                house_number=house_number,
+                                apartment=apartment,
+                                postal_code=postal_code,
+                            )
+                            message += f" Address: '{address}'."
+                        except Exception as e:
+                            print(
+                                Colorizer.warning(
+                                    f"⚠️ Address could not be set: {e}. Continuing..."
+                                )
+                            )
 
     return message
 
@@ -206,8 +213,8 @@ def show_phone_user(args, book: AddressBook):
     """Usage: phone [name]"""
     if len(args) != 1:
         raise ValueError("Usage: phone [name]")
-    name = args[0]
-    record = book.find(name)  #
+    name = args[0].capitalize()
+    record = book.find(name)
     if not record:
         return f"Contact '{name}' not found."
     if not record.phones:
@@ -333,21 +340,19 @@ def add_address(args, book: AddressBook):
         return f"Contact '{name}' not found."
 
     # Interactive address input (same logic as in add_contact)
-    street = (
-        PROMPT_TOOL.ask("Enter street:", enable_completion=False).strip().capitalize()
-    )
-    if not street:
-        raise ValueError("Street cannot be empty.")
-
-    city = PROMPT_TOOL.ask("Enter city:", enable_completion=False).strip().capitalize()
-    if not city:
-        raise ValueError("City cannot be empty.")
-
     country = (
         PROMPT_TOOL.ask("Enter country:", enable_completion=False).strip().capitalize()
     )
     if not country:
         raise ValueError("Country cannot be empty.")
+
+    city = PROMPT_TOOL.ask("Enter city:", enable_completion=False).strip().capitalize()
+    if not city:
+        raise ValueError("City cannot be empty.")
+
+    street = PROMPT_TOOL.ask("Enter street:", enable_completion=False).strip().title()
+    if not street:
+        raise ValueError("Street cannot be empty.")
 
     house_number = (
         PROMPT_TOOL.ask(
@@ -470,7 +475,7 @@ def search_address_global(args, book: AddressBook):
     lines = [f"Addresses matching '{query}':", "-" * 50]
     for contact_name, address in results:
         lines.append(f"{contact_name}: {address}")
-    return "\n.join(lines)"
+    return "\n".join(lines)
 
 
 @input_error
@@ -509,11 +514,12 @@ def search_contact(args, book: AddressBook):
     if not found_records:
         return f"No contacts found '{query}'."
 
-    output = [f"Found {len(found_records)} contacts '{query}':"]
-    for record in found_records:
-        output.append(str(record))
-
-    return "\n".join(output)
+    output = [f"Found {len(found_records)} contact(s) '{query}':"]
+    # for record in found_records:
+    #     output.append(str(record))
+    print(output[0])
+    # return "\n".join(output)
+    return found_records
 
 
 @input_error

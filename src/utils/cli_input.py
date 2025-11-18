@@ -9,18 +9,18 @@ from prompt_toolkit.history import FileHistory
 class Prompt:
     """Universal input wrapper using prompt_toolkit with autocomplete & history."""
 
-    style = Style.from_dict({
-        "prompt": "bold #00afff",
-    })
+    style = Style.from_dict(
+        {
+            "prompt": "bold #00afff",
+        }
+    )
 
     def __init__(self, commands=None, history_file="src/storage/command_history.txt"):
 
         self.commands = commands or []
         self.completer = WordCompleter(self.commands, ignore_case=True)
 
-        self.session = PromptSession(
-            history=FileHistory(history_file)
-        )
+        self.session = PromptSession(history=FileHistory(history_file))
 
     def ask(self, text=">>> ", enable_completion=True):
         """
@@ -44,7 +44,5 @@ class Prompt:
         completer = first_word_completer() if enable_completion else None
 
         return self.session.prompt(
-            [("class:prompt", text)],
-            completer=completer,
-            style=self.style
+            [("class:prompt", text)], completer=completer, style=self.style
         )

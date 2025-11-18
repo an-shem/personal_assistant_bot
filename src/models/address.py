@@ -72,13 +72,8 @@ class Address:
     def get_full_address(self):
         parts = []
 
-        if self._street:
-            street_part = self._street
-            if self._house_number:
-                street_part += f", house {self._house_number}"
-            if self._apartment:
-                street_part += f", apt. {self._apartment}"
-            parts.append(street_part)
+        if self._country:
+            parts.append(self._country)
 
         if self._city:
             parts.append(self._city)
@@ -86,8 +81,13 @@ class Address:
         if self._postal_code:
             parts.append(f"({self._postal_code})")
 
-        if self._country:
-            parts.append(self._country)
+        if self._street:
+            street_part = self._street
+            if self._house_number:
+                street_part += f", house {self._house_number}"
+            if self._apartment:
+                street_part += f", apt. {self._apartment}"
+            parts.append(street_part)
 
         return ", ".join(parts)
 

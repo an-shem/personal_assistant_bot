@@ -94,7 +94,9 @@ def main():
         elif command == "birthdays":
             print(Colorizer.info(birthdays(args, book)))
         elif command == "search":
-            print(Colorizer.info(search_contact(args, book)))
+            # print(Colorizer.info(search_contact(args, book)))
+            contacts = search_contact(args, book)
+            show_contacts_table(contacts)
         elif command == "add-note":
             print(Colorizer.success(add_note(args, notes)))
         elif command == "show-notes":
