@@ -178,5 +178,5 @@ Storage files are located in the directory:
 
 [GITHUB](https://github.com/an-shem) Andrii Shemet Team Lead/Developer  
 [GITHUB](https://github.com/Gilona-itsme) Ilona Hil Scrum Master/Developer  
-[GITHUB](https://github.com/User-Student1) Andrii Shemet Developer  
+[GITHUB](https://github.com/User-Student1)  Illia Serhunin Developer  
 [GITHUB](https://github.com/Nikita-Sivtsov) Nikita Sivtsov Developer  

@@ -4,8 +4,9 @@ from src.utils.handler_commands import (
     add_contact,
     change_contact,
     delete_contact,
+    delete_pfone,
+    find_contact,
     show_phone_user,
-    show_all,
     add_email,
     add_birthday,
     show_birthday,
@@ -64,8 +65,16 @@ def main():
             print_commands_table()
         elif command == "add":
             print(Colorizer.success(add_contact(args, book)))
+        elif command == "find":
+            result = find_contact(args, book)
+            if isinstance(result, list):
+                show_contacts_table(result)
+            elif isinstance(result, str):
+                print(result)
         elif command == "change":
             print(Colorizer.info(change_contact(args, book)))
+        elif command == "delete-phone":
+            print(Colorizer.warning(delete_pfone(args, book)))
         elif command == "phone":
             print(Colorizer.highlight(show_phone_user(args, book)))
         elif command == "all":
@@ -94,7 +103,11 @@ def main():
         elif command == "birthdays":
             print(Colorizer.info(birthdays(args, book)))
         elif command == "search":
-            print(Colorizer.info(search_contact(args, book)))
+            result = search_contact(args, book)
+            if isinstance(result, list):
+                show_contacts_table(result)
+            elif isinstance(result, str):
+                print(result)
         elif command == "add-note":
             print(Colorizer.success(add_note(args, notes)))
         elif command == "show-notes":

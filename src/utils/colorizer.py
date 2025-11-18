@@ -2,13 +2,14 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
+
 class Colorizer:
-    INFO = 'info'
-    WARNING = 'warning'
-    ERROR = 'error'
-    SUCCESS = 'success'
-    HIGHLIGHT = 'highlight'
-    COMMANDLINE = 'commandline'
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    SUCCESS = "success"
+    HIGHLIGHT = "highlight"
+    COMMANDLINE = "commandline"
 
     @staticmethod
     def colorize(message: str, msg_type: str = INFO) -> str:

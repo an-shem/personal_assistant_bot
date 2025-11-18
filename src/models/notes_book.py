@@ -16,7 +16,7 @@ class Note:
             return set()
 
         if isinstance(tags_input, str):
-            tags_list = tags_input.replace(',', ' ').split()
+            tags_list = tags_input.replace(",", " ").split()
         elif isinstance(tags_input, (list, set, tuple)):
             tags_list = tags_input
         else:
@@ -59,7 +59,6 @@ class NotesBook(UserDict):
         """Add a new note by title."""
         self.data[note.title.value] = note
 
-
     def find_note_by_title(self, title):
         """Find a note by title."""
         search_title = title.lower()
@@ -67,7 +66,6 @@ class NotesBook(UserDict):
             if key.lower() == search_title:
                 return note
         return None
-
 
     def search_notes_by_keyword(self, keyword):
         """Find note by keyword"""
@@ -85,14 +83,12 @@ class NotesBook(UserDict):
                 found_notes.append(note)
         return found_notes
 
-
     def delete_note(self, title):
         """Delete a note by title."""
         if title in self.data:
             del self.data[title]
             return f"Note with title: '{title}' successfully deleted."
         return f"Note with title: '{title}' not found."
-
 
     def change_note(self, title, new_content):
         """Change the note by title."""
@@ -103,16 +99,21 @@ class NotesBook(UserDict):
         else:
             return f"Note with title: '{title}' not found."
 
-
     def search_and_sort_by_tag(self, tag: str):
         """Search notes by tag"""
         normalized_tag = tag.strip().lstrip("#").lower()
         if not normalized_tag:
             return []
-    
-        found = [note for note in self.data.values() if normalized_tag in getattr(note, "tags", set())]
-        
-        sorted_notes = sorted(found, key=lambda n: (-len(n.tags), n.title.value.lower()))
+
+        found = [
+            note
+            for note in self.data.values()
+            if normalized_tag in getattr(note, "tags", set())
+        ]
+
+        sorted_notes = sorted(
+            found, key=lambda n: (-len(n.tags), n.title.value.lower())
+        )
         return sorted_notes
 
     def __str__(self):

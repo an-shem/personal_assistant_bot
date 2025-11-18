@@ -90,7 +90,6 @@ class AddressBook(UserDict):
 
         for record in self.data.values():
 
-
             if query_date:
                 if (
                     hasattr(record, "birthday")
@@ -102,11 +101,9 @@ class AddressBook(UserDict):
                         results.append(record)
                         continue
 
-
             if query_lower in record.name.value.lower():
                 results.append(record)
                 continue
-
 
             phone_matches = any(
                 query_lower in phone.value.lower() for phone in record.phones
@@ -114,7 +111,6 @@ class AddressBook(UserDict):
             if phone_matches:
                 results.append(record)
                 continue
-
 
             if (
                 hasattr(record, "email")
@@ -131,13 +127,13 @@ class AddressBook(UserDict):
             ):
                 results.append(record)
                 continue
-            
+
             if getattr(record, "addresses", None):
                 for address in record.addresses:
                     full_addr = address.get_full_address().lower()
                     if query_lower in full_addr:
                         results.append(record)
-                        break 
+                        break
 
         return results
 

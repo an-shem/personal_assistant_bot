@@ -4,11 +4,12 @@ from src.models.address_book import AddressBook
 from src.models.notes_book import NotesBook
 
 
-BASE_DIR = Path.home() / ".personal_assistant"
+BASE_DIR = Path(__file__).resolve().parent
 BASE_DIR.mkdir(exist_ok=True)
 
 CONTACTS_FILE = BASE_DIR / "addressbook.pkl"
 NOTES_FILE = BASE_DIR / "notes.pkl"
+print("BASE_DIR >>> ", BASE_DIR)
 
 
 def save_data(book: AddressBook, notes: NotesBook):

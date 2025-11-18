@@ -38,7 +38,9 @@ def show_contacts_table(contacts):
     for contact in contacts:
         phones_str = ""
         if getattr(contact, "phones", None):
-            phones_str = ", ".join(p.value for p in contact.phones)
+            phones_str = "\n".join(
+                Colorizer.info(p.value + ",") for p in contact.phones
+            )
 
         email_str = ""
         if getattr(contact, "email", None):
@@ -53,16 +55,17 @@ def show_contacts_table(contacts):
 
         addresses_str = ""
         if getattr(contact, "addresses", None):
-            addresses_str = "; ".join(
-                addr.get_full_address() for addr in contact.addresses
+            addresses_str = "\n".join(
+                Colorizer.info(addr.get_full_address() + ",")
+                for addr in contact.addresses
             )
 
         table.append(
             [
                 Colorizer.highlight(contact.name.value),
-                Colorizer.info(phones_str),
+                phones_str,
                 Colorizer.info(email_str),
-                Colorizer.info(addresses_str),
+                addresses_str,
                 Colorizer.info(birthday_str),
             ]
         )
