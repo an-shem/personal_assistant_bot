@@ -4,6 +4,7 @@ from src.utils.handler_commands import (
     add_contact,
     change_contact,
     delete_contact,
+    delete_pfone,
     find_contact,
     show_phone_user,
     add_email,
@@ -72,6 +73,8 @@ def main():
                 print(result)
         elif command == "change":
             print(Colorizer.info(change_contact(args, book)))
+        elif command == "delete-phone":
+            print(Colorizer.warning(delete_pfone(args, book)))
         elif command == "phone":
             print(Colorizer.highlight(show_phone_user(args, book)))
         elif command == "all":

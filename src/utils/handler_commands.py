@@ -241,6 +241,47 @@ def show_phone_user(args, book: AddressBook):
 
 
 @input_error
+def delete_pfone(args, book: AddressBook):
+    """Usage: delete-phone [name] — delete one of the contact's phones."""
+    if len(args) != 1:
+        raise ValueError("Usage: delete-phone [name]")
+
+    name = args[0].capitalize()
+    record = book.find(name)
+    if not record:
+        return f"Contact '{name}' not found."
+
+    phones = record.get_all_phones()
+    if not phones:
+        return f"Contact '{name}' has no phones."
+
+    print(f"Phones for contact '{name}':")
+    for idx, phone in enumerate(phones, start=1):
+        print(f"  {idx}. {phone}")
+
+    choice_str = PROMPT_TOOL.ask(
+        f"Enter the number of the phone to delete (1-{len(phones)}):",
+        enable_completion=False,
+    ).strip()
+
+    if not choice_str.isdigit():
+        raise ValueError("Phone number must be an integer.")
+
+    choice = int(choice_str)
+    if not (1 <= choice <= len(phones)):
+        raise ValueError(f"Phone number must be between 1 and {len(phones)}.")
+
+    phone_to_delete = phones[choice - 1]
+
+    phone_value = getattr(phone_to_delete, "value", phone_to_delete)
+
+    if record.remove_phone(phone_value):
+        return f"Phone #{choice} ({phone_value}) deleted for contact '{name}'."
+    else:
+        return "Failed to delete the phone. It was not found in the contact."
+
+
+@input_error
 def show_all(book: AddressBook):
     """Show all contacts in the address book."""
     if not book.data:

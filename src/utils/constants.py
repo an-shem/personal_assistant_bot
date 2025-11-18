@@ -7,6 +7,7 @@ COMMANDS_INFO = {
     "find [name]": "Find contact by name",
     "change [name] [old_phone] [new_phone]": "Change an existing phone",
     "phone [name]": "Show phone(s) of a contact",
+    "delete-phone [name]": "Delete contact phone number",
     "search-phone [phone]": "Search contacts by phone number.",
     "all": "Show all contacts",
     "delete [name]": "Delete a contact",

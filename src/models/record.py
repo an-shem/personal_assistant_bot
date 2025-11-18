@@ -32,7 +32,7 @@ class Record:
         self.phones.append(phone_obj)
 
     def remove_phone(self, number):
-        """Remove a phone number from the record."""
+        """Remove a phone number from the record. Return True if removed, else False."""
         try:
             phone_obj = Phone(number)
             number_to_remove = phone_obj.value
@@ -43,8 +43,8 @@ class Record:
         self.phones = [
             phone for phone in self.phones if phone.value != number_to_remove
         ]
-        if len(self.phones) == original_count:
-            raise ValueError(f"Phone number {number_to_remove} not found")
+
+        return len(self.phones) < original_count
 
     def edit_phone(self, old_number, new_number):
         """Edit a phone number in the record."""
@@ -155,6 +155,10 @@ class Record:
     def get_all_addresses(self):
         """Get all addresses for this contact."""
         return self.addresses.copy()
+
+    def get_all_phones(self):
+        """Get all phones for this contact."""
+        return self.phones.copy()
 
     def __str__(self):
         # Phones
