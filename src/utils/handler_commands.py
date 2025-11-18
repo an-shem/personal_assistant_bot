@@ -16,6 +16,7 @@ ALL_COMMANDS = [
     "exit",
     # contacts & phones
     "add",
+    "find",
     "change",
     "phone",
     "search-phone",
