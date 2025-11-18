@@ -66,14 +66,10 @@ def main():
             print(Colorizer.success(add_contact(args, book)))
         elif command == "find":
             result = find_contact(args, book)
-            # Если вернулся список записей – рисуем таблицу
             if isinstance(result, list):
                 show_contacts_table(result)
-            # Если вернулась строка (сообщение об ошибке или подсказка использования)
             elif isinstance(result, str):
                 print(result)
-            # contact = find_contact(args, book)
-            # show_contacts_table(contact)
         elif command == "change":
             print(Colorizer.info(change_contact(args, book)))
         elif command == "phone":
@@ -105,14 +101,10 @@ def main():
             print(Colorizer.info(birthdays(args, book)))
         elif command == "search":
             result = search_contact(args, book)
-            # Если вернулся список записей – рисуем таблицу
             if isinstance(result, list):
                 show_contacts_table(result)
-            # Если вернулась строка (сообщение об ошибке или подсказка использования)
             elif isinstance(result, str):
                 print(result)
-            # contacts = search_contact(args, book)
-            # show_contacts_table(contacts)
         elif command == "add-note":
             print(Colorizer.success(add_note(args, notes)))
         elif command == "show-notes":
