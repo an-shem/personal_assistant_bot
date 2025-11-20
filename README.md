@@ -59,7 +59,7 @@ cd personal_assistant_bot
 
 
 ### 2. Creation and activation of a virtual environment (recommended)
-`python -m venv venv`
+`python -m venv .venv`
 
 ## Linux / macOS:
 `source .venv/bin/activate`
