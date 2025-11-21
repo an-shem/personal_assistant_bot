@@ -9,7 +9,6 @@ BASE_DIR.mkdir(exist_ok=True)
 
 CONTACTS_FILE = BASE_DIR / "addressbook.pkl"
 NOTES_FILE = BASE_DIR / "notes.pkl"
-print("BASE_DIR >>> ", BASE_DIR)
 
 
 def save_data(book: AddressBook, notes: NotesBook):
